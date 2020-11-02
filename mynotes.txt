@@ -1,0 +1,32 @@
+class Game {
+    - SerialVersionUID
+    - _obstacleManager : ObstacleManager
+    - _ballManager : BallManager
+    - _shufflerManager : ShufflerManager
+    - _tokenManager : TokenManager
+    - _currentScore : Integer
+    - _highScore : Integer
+    + Game()
+    + showMenu()
+    - loadGame()
+    - newGame()
+    - exitGame()
+    - upate()
+    - handleCollisions()
+}
+
+
+class ObstacleManager {
+    - SerialVersionUID
+    - _allObstacles : ArrayList<Obstacle>
+    + ObstacleManager()
+    + generateObstacle()
+}
+
+class Obstacle {
+    # vecX
+    # vecY
+    # posX
+    # posY
+    ~ checkCollision
+}
