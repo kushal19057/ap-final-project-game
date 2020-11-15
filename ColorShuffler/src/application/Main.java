@@ -10,7 +10,7 @@ public class Main extends Application {
         try {
             ViewManager manager = new ViewManager();
             primaryStage = manager.getMainStage();
-            primaryStage.setTitle("ColorShuffler game : Lets jump");
+            primaryStage.setTitle("ColorSwitch: Jump!");
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
