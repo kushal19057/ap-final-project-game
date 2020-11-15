@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/ap-final-project-game.iml" filepath="$PROJECT_DIR$/ap-final-project-game.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ColorShuffler.iml" filepath="$PROJECT_DIR$/ColorShuffler.iml" />
     </modules>
   </component>
 </project>
