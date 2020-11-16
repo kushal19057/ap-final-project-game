@@ -12,6 +12,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.ColorSwitchButton;
 import model.ColorSwitchSubscene;
+import model.InfoLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,11 +61,23 @@ public class ViewManager {
         helpSubScene = new ColorSwitchSubscene();
         mainPane.getChildren().add(helpSubScene);
 
+        loadGameSubScene = new ColorSwitchSubscene();
+        mainPane.getChildren().add(loadGameSubScene);
+
+        createNewGameSubscene();
+    }
+
+    private void createNewGameSubscene() {
         startGameSubScene = new ColorSwitchSubscene();
         mainPane.getChildren().add(startGameSubScene);
 
-        loadGameSubScene = new ColorSwitchSubscene();
-        mainPane.getChildren().add(loadGameSubScene);
+        InfoLabel startGameLabel = new InfoLabel("Start a new Game");
+        startGameLabel.setLayoutX(110);
+        startGameLabel.setLayoutY(25);
+
+        startGameSubScene.getPane().getChildren().add(startGameLabel);
+
+
     }
 
     public Stage getMainStage() {
