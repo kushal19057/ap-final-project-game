@@ -1,7 +1,6 @@
 package view;
 
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.effect.DropShadow;
@@ -12,7 +11,6 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import model.ColorSwitchButton;
 import model.ColorSwitchSubscene;
-import model.InfoLabel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,13 +24,12 @@ public class ViewManager {
     private Stage mainStage;
     private final static int MENU_BUTTONS_START_X = 100;
     private final static int MENU_BUTTONS_START_Y = 250;
-
+    private final static String PRESS_SPACE_IMAGE = "model/resources/press_space.gif";
     private ColorSwitchSubscene helpSubScene;
     private ColorSwitchSubscene loadGameSubScene;
     private ColorSwitchSubscene startGameSubScene;
 
     private ColorSwitchSubscene sceneToHide;
-
     List<ColorSwitchButton> menuButtons;
 
     public ViewManager() {
@@ -70,14 +67,10 @@ public class ViewManager {
     private void createNewGameSubscene() {
         startGameSubScene = new ColorSwitchSubscene();
         mainPane.getChildren().add(startGameSubScene);
-
-        InfoLabel startGameLabel = new InfoLabel("Start a new Game");
-        startGameLabel.setLayoutX(110);
-        startGameLabel.setLayoutY(25);
-
-        startGameSubScene.getPane().getChildren().add(startGameLabel);
-
-
+        ImageView pressSpace = new ImageView(PRESS_SPACE_IMAGE);
+        pressSpace.setLayoutX(50);
+        pressSpace.setLayoutY(100);
+        startGameSubScene.getPane().getChildren().add(pressSpace);
     }
 
     public Stage getMainStage() {
