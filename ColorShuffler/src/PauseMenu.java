@@ -53,7 +53,7 @@ public class PauseMenu extends Application {
             primaryStage = PauseMenuStage;
             primaryStage.show();
             initGameStage();
-            initLoadGameStage(mainMenuStage);
+            initLoadGameStage(PauseMenuStage);
             createKeyListener();
             radius = 100;
             centerX = 280;
@@ -86,11 +86,11 @@ public class PauseMenu extends Application {
     }
 
     private void initPauseMenu() {
-        mainMenuPane = new AnchorPane();
-        mainMenuScene = new Scene(mainMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
-        mainMenuStage = new Stage();
-        mainMenuStage.setTitle("Pause Menu");
-        mainMenuStage.setScene(PauseMenuScene);
+        PauseMenuPane = new AnchorPane();
+        PauseMenuScene = new Scene(PauseMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
+        PauseMenuStage = new Stage();
+        PauseMenuStage.setTitle("Pause Menu");
+        PauseMenuStage.setScene(PauseMenuScene);
         menuButtons = new ArrayList<>();
         createButtons();
         createBackground();
@@ -98,57 +98,61 @@ public class PauseMenu extends Application {
     }
 
     private void createButtons() {
-        createSave&Return();
+        createSaveAndReturn();
         createRestartGame();
         createReturntoGame();
-        createSave&Exit();
+        createSaveAndExit();
     }
 
-    private void createSave&Return() {
+    private void createSaveAndReturn() {
         ColorSwitchButton startButton = new ColorSwitchButton("SAVE & RETURN TO MAIN MENU");
-        addMenuButton(Save%ReturnButton);
+        addMenuButton(SaveAndReturnButton);
 
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                mainMenuStage.hide();
+                //CODE FOR SAVING IS REQUIRED. CODE TO RETURN IS REQUIRED SINCE IT IS DIFFERENT FROM Starting a new game.
+                pauseMenuStage.hide();
                 //playing = true;
                 gameStage.show();
+                //returnToGame();
                 startGame();
             }
         });
     }
 
-    private void createLoadGameButton() {
-        ColorSwitchButton loadGameButton = new ColorSwitchButton("LOAD GAME");
-        addMenuButton(loadGameButton);
+    private void createRestartGame() {
+        ColorSwitchButton RestartGameButton = new ColorSwitchButton("RESTART GAME");
+        addMenuButton(RestartGameButton);
 
         loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                loadGameStage.show();
+                GameStage.show();
+                startGame();
             }
         });
     }
 
-    private void createHelpButton() {
-        ColorSwitchButton helpButton = new ColorSwitchButton("HELP");
-        addMenuButton(helpButton);
+    private void createReturntoGame() {
+        ColorSwitchButton helpButton = new ColorSwitchButton("RETURN TO GAME");
+        addMenuButton(ReturntoGameButton);
 
         helpButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-
+               pauseMenuStage.hide();
             }
         });
     }
 
-    private void createExitButton() {
-        ColorSwitchButton exitButton = new ColorSwitchButton("EXIT");
+    private void createSaveAndExitButton() {
+        ColorSwitchButton exitButton = new ColorSwitchButton("SAVE AND EXIT");
         addMenuButton(exitButton);
 
         exitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
+            //CODE FOR SAVING THE GAME?
             public void handle(ActionEvent actionEvent) {
                 mainMenuStage.close();
             }
