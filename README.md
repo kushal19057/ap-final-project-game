@@ -5,3 +5,6 @@ Some important websites:
 - https://openjfx.io/openjfx-docs/#install-javafx
 - For images and sounds : https://www.kenney.nl/
 - Game tutorial for space adventure game : https://youtu.be/6BKI26gxK2Q
+
+POINTS TO BE NOTED:
+We are opening up the pause menu during gameplay by pressing 'P' on the keyboard, and not through a graphical button.
