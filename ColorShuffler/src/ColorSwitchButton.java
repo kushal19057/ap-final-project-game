@@ -1,5 +1,3 @@
-package model;
-
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
@@ -11,37 +9,31 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class ColorSwitchButton extends Button {
-    private final String FONT_PATH = "src/model/resources/kenvector_future.ttf";
-    private final String YELLOW_BUTTON_PRESSED_STYLE = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/yellow_button_pressed.png');";
-    private final String YELLOW_BUTTON_FREE_STYLE = "-fx-background-color: transparent; -fx-background-image: url('/model/resources/yellow_button.png');";
-
     public ColorSwitchButton(String text) {
-        // create an enum to select button color in constructor, use ship example to proceed
-        // we cannot create a yellow button always
         setText(text);
         setButtonFont();
-        setPrefWidth(190);
-        setPrefHeight(49);
-        setStyle(YELLOW_BUTTON_FREE_STYLE);
+        setPrefWidth(250);
+        setPrefHeight(50);
+        setStyle(Constants.BUTTON_FREE_STYLE);
         initialiseButtonListeners();
     }
 
     private void setButtonFont() {
         try {
-            setFont(Font.loadFont(new FileInputStream(FONT_PATH), 23));
+            setFont(Font.loadFont(new FileInputStream(Constants.FONT_PATH), 25));
         } catch (FileNotFoundException e) {
-            setFont(Font.font("Vardana", 23));
+            setFont(Font.font("Vardana", 25));
         }
     }
 
     private void setButtonPressedStyle() {
-        setStyle(YELLOW_BUTTON_PRESSED_STYLE);
+        setStyle(Constants.BUTTON_PRESSED_STYLE);
         setPrefHeight(45);
         setLayoutY(getLayoutY() + 4);
     }
 
     private void setButtonReleasedStyle() {
-        setStyle(YELLOW_BUTTON_FREE_STYLE);
+        setStyle(Constants.BUTTON_FREE_STYLE);
         setPrefHeight(49);
         setLayoutY(getLayoutY() - 4);
     }
