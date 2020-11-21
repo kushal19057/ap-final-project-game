@@ -11,7 +11,9 @@ public class Constants {
     public static final int MAIN_MENU_OPTION_WIDTH = 400;
     public static final int MAIN_MENU_OPTION_HEIGHT = 600;
 
-    public static final int UPDATE_PERIOD = 50;
+    public static final int UPDATE_PERIOD = 15; // update after every 15 ms
+    public static final int GRAVITY = 5; // 1000 pixels / s2
+
     public static final String FONT_PATH = "ColorShuffler/src/resources/kenvector_future_thin.ttf";
 
     public static final String BUTTON_PRESSED_STYLE = "-fx-background-color: #f0ffff;";
