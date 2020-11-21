@@ -154,7 +154,7 @@ public class PauseMenu extends Application {
             @Override
             //CODE FOR SAVING THE GAME?
             public void handle(ActionEvent actionEvent) {
-                mainMenuStage.close();
+                PauseMenuStage.close();
             }
         });
     }
