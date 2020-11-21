@@ -27,21 +27,13 @@ public class MainMenu extends Application {
     private Scene mainMenuScene;
     private AnchorPane mainMenuPane;
 
-    private Stage gameStage;
-    private Scene gameScene;
-    private AnchorPane gamePane;
+    private Game gameManager;
 
     private Stage loadGameStage;
     private Scene loadGameScene;
     private AnchorPane loadGamePane;
 
     private List<ColorSwitchButton> menuButtons;
-
-    private Circle ball;
-    private int centerX;
-    private int centerY;
-    private int radius;
-
 
     public static void main(String[] args) {
         launch(args);
@@ -53,26 +45,11 @@ public class MainMenu extends Application {
             initMainMenu();
             primaryStage = mainMenuStage;
             primaryStage.show();
-            initGameStage();
             initLoadGameStage(mainMenuStage);
-            createKeyListener();
-            radius = 100;
-            centerX = 280;
-            centerY = 700;
-            this.ball = new Circle(centerX, centerY, radius, Color.LIGHTSKYBLUE);
-            gamePane.getChildren().add(ball);
 
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private void initGameStage() {
-        gamePane = new AnchorPane();
-        gameScene = new Scene(gamePane, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
-        gameStage = new Stage();
-        gameStage.setTitle("Color Switcher");
-        gameStage.setScene(gameScene);
     }
 
     private void initLoadGameStage(Stage parent) {
@@ -112,10 +89,8 @@ public class MainMenu extends Application {
         startButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                mainMenuStage.hide();
-                //playing = true;
-                gameStage.show();
-                startGame();
+                gameManager = new Game();
+                gameManager.createNewGame(mainMenuStage);
             }
         });
     }
@@ -174,24 +149,5 @@ public class MainMenu extends Application {
         logo.setLayoutX(185);
         logo.setLayoutY(30);
         mainMenuPane.getChildren().add(logo);
-    }
-
-    private void createKeyListener() {
-            gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent keyEvent) {
-                    if (keyEvent.getCode() == KeyCode.SPACE) {
-                        System.out.println("Space Bar pressed");
-                    }
-                }
-            });
-    }
-    private void startGame() {
-        Timeline loop = new Timeline(new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), evt-> {
-
-        }));
-
-        loop.setCycleCount(Timeline.INDEFINITE);
-        loop.play();
     }
 }
