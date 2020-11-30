@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -43,6 +44,8 @@ public class Game {
     private List<ColorSwitch> listOfColorSwitchers;
     private List<Star> listOfStars;
     
+    private Label pointsLabel;
+    
     private Random random;
     
     private int currentScore;
@@ -58,8 +61,8 @@ public class Game {
     private Obstacle topmost;
 
     public Game() {
-    	initConstants();
     	initStage();
+    	initConstants();
     	initGameElements();
         createBackground();
         createKeyListener();
@@ -76,6 +79,7 @@ public class Game {
     	listOfObstacles = new ArrayList<>();
     	listOfColorSwitchers = new ArrayList<>();
     	listOfStars = new ArrayList<>();
+    	pointsLabel = new Label("POINTS: 00");
     	numObstacles = 1;
 		Constants.map.put(0,Color.AQUA);
 		Constants.map.put(1,Color.HOTPINK);
@@ -95,16 +99,23 @@ public class Game {
     	currentPositionY = ball.getPositionY();
     	currentVelocityY = ball.getVelocityY();
     	
+    	pointsLabel.setLayoutX(10);
+    	pointsLabel.setLayoutY(10);
+    	pointsLabel.setFont(Font.font("arial", FontWeight.BOLD, 40));
+    	pointsLabel.setTextFill(Color.ALICEBLUE);
+    	gamePane.getChildren().add(pointsLabel);
+    	
     	topmost = generateObstacleRandomly(Constants.GAME_HEIGHT/2);
     	int current = topmost.getPositionY();
     	listOfObstacles.add(topmost);
     	listOfColorSwitchers.add(new ColorSwitch(current));
-    	// XXX star
+    	listOfStars.add(new Star(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
     	while(topmost.getPositionY() >= 0) {
     		current = current - Constants.DISTANCE_BETWEEN_OBSTACLES;
     		topmost = generateObstacleRandomly(current);
     		listOfObstacles.add(topmost);
     		listOfColorSwitchers.add(new ColorSwitch(current));
+    		listOfStars.add(new Star(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
     	}
     	// add game elements to the pane
     	for(Obstacle o : listOfObstacles) {
@@ -112,6 +123,9 @@ public class Game {
     	}
     	for(ColorSwitch c : listOfColorSwitchers) {
     		c.addElementsToGamePane(gamePane);
+    	}
+    	for(Star s : listOfStars) {
+    		s.addElementsToGamePane(gamePane);
     	}
     }
     
@@ -168,7 +182,9 @@ public class Game {
     	}
     	for(ColorSwitch c : listOfColorSwitchers) {
     		c.setPositionY(c.getPositionY() + delta);
-    		// XXX do similar strategy for star
+    	}
+    	for(Star s : listOfStars) {
+    		s.setPositionY(s.getPositionY() + delta);
     	}
     }
     
@@ -180,6 +196,10 @@ public class Game {
     			Shape intersect = Shape.intersect(block, arc);
     			if(intersect.getBoundsInLocal().getWidth() != -1) {
     				if(block.getFill().equals(arc.getStroke())) {
+    					// nothing
+    				} else {
+    					// this is the correct logic
+    					// the ball passes through the same color only
     					collisionDetected = true;
     					break;
     				}
@@ -217,9 +237,29 @@ public class Game {
     			iter.remove();
     			break;
     		}
-
-    		// XXX star
     	}
+		// check for star
+    	Iterator<Star> iterstar = listOfStars.iterator();
+    	while(iterstar.hasNext()) {
+    		Star s = iterstar.next();
+    		if(Constants.BALL_RADIUS + Constants.STAR_RADIUS > calculateDistance(ball.getPositionY(), s.getPositionY())) {
+    			currentScore++;
+    			String text = "POINTS: ";
+    			if(currentScore < 10) {
+    				text = text + "0";
+    			}
+    			text = text + currentScore;
+    			pointsLabel.setText(text);
+    			// remove this star graphically and logically
+    			iterstar.remove();
+    			s.removeFromPane(gamePane); // XXXkchecl
+    		}
+    	}
+    }
+    
+    private int calculateDistance(int y1, int y2) {
+    	return Math.abs(y1 - y2);
+    	
     }
     
     private void obstacleCollision() {
@@ -229,7 +269,11 @@ public class Game {
 		currentVelocityY = 0;
 		gravity = 0;
 		firstSpace = false;
-		ballTimeline.pause();
+		ballTimeline.stop();
+		gameStage.close();
+		System.out.println(currentScore);
+		// add revive option
+		//ballTimeline.pause();
     }
     
     private void generateNewObstacleAndCollectables() {
@@ -244,7 +288,10 @@ public class Game {
     		ColorSwitch c1 = new ColorSwitch(topY);
     		listOfColorSwitchers.add(c1);
     		c1.addElementsToGamePane(gamePane);
-    		// XXX do for star
+    		// corresponding to this , generate a star
+    		Star s1 = new Star(topY - Constants.DISTANCE_BETWEEN_OBSTACLES/2);
+    		listOfStars.add(s1);
+    		s1.addElementsToGamePane(gamePane);
     	}
     }
 //    
