@@ -1,29 +1,21 @@
 package application;
 
-import javafx.animation.AnimationTimer;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.effect.DropShadow;
-import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
+
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Duration;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,10 +36,12 @@ public class MainMenu extends Application {
     private Scene helpScene;
     private AnchorPane helpPane;
     
-    private Circle ball;
-    private int centerX = 280, centerY = 220;
-    private int radius = 50;
-    private int xStep = 8, yStep = 15;
+    // try to show a double pendulum in the main menu. if time permits.
+    
+//    private Circle ball;
+//    private int centerX = 280, centerY = 220;
+//    private int radius = 50;
+//    private int xStep = 8, yStep = 15;
 
     private List<ColorSwitchButton> menuButtons;
 
@@ -110,32 +104,32 @@ public class MainMenu extends Application {
         mainMenuStage.setTitle("Main Menu");
         mainMenuStage.setScene(mainMenuScene);
         menuButtons = new ArrayList<>();
-        createBall();
+        //createBall();
         createButtons();
         createBackground();
         createLogo();
     }
     
-    private void createBall() {
-    	ball = new Circle(centerX, centerY, radius, Color.HOTPINK);
-    	ball.setEffect(new DropShadow());
-    	mainMenuPane.getChildren().addAll(ball);
-    	Timeline loop = new Timeline(new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), evt -> {
-    		centerX += xStep;
-    		centerY += yStep;
-    		if(centerX + radius > Constants.MENU_WIDTH || centerX - radius < 0) {
-    			xStep = -xStep;
-    		}
-    		if(centerY + radius > Constants.MENU_HEIGHT || centerY - radius < 0) {
-    			yStep = -yStep;
-    		}
-    		ball.setCenterX(centerX);
-    		ball.setCenterY(centerY);
-    	}));
-    	loop.setCycleCount(Timeline.INDEFINITE);
-    	loop.play();
-    	
-    }
+//    private void createBall() {
+//    	ball = new Circle(centerX, centerY, radius, Color.HOTPINK);
+//    	ball.setEffect(new DropShadow());
+//    	mainMenuPane.getChildren().addAll(ball);
+//    	Timeline loop = new Timeline(new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), evt -> {
+//    		centerX += xStep;
+//    		centerY += yStep;
+//    		if(centerX + radius > Constants.MENU_WIDTH || centerX - radius < 0) {
+//    			xStep = -xStep;
+//    		}
+//    		if(centerY + radius > Constants.MENU_HEIGHT || centerY - radius < 0) {
+//    			yStep = -yStep;
+//    		}
+//    		ball.setCenterX(centerX);
+//    		ball.setCenterY(centerY);
+//    	}));
+//    	loop.setCycleCount(Timeline.INDEFINITE);
+//    	loop.play();
+//    	
+//    }
 
     private void createButtons() {
         createStartButton();

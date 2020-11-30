@@ -1,5 +1,9 @@
 package application;
 
+import java.util.HashMap;
+
+import javafx.scene.paint.Paint;
+
 public class Constants {
     public static final int MENU_WIDTH = 600;
     public static final int MENU_HEIGHT = 800;
@@ -13,8 +17,8 @@ public class Constants {
     public static final int MAIN_MENU_OPTION_WIDTH = 400;
     public static final int MAIN_MENU_OPTION_HEIGHT = 600;
 
-    public static final int UPDATE_PERIOD = 16; // 16ms 
-    public static final int GRAVITY = 4; 
+    public static final double UPDATE_PERIOD = 25;
+    public static final int GRAVITY = 3; 
     public static final int VELOCITY_JUMP = -8; 
 
     public static final String FONT_PATH = "src/resources/kenvector_future_thin.ttf";
@@ -22,6 +26,14 @@ public class Constants {
     public static final String BUTTON_PRESSED_STYLE = "-fx-background-color: #f0ffff;";
     public static final String BUTTON_FREE_STYLE = "-fx-background-color: #f0f8ff;";
     
-    public static final int BALL_RADIUS = 25;
+    public static final int BALL_RADIUS = 20;
+    
+    public static final int DISTANCE_BETWEEN_OBSTACLES = 600;
+    
+    public static final int START_DELTA_BALL = 100;
+    
+    public static final int HEIGHT_AFTER_WHICH_OBSTACLE_GENERATE = 200;
+    
+    public final static HashMap<Integer,Paint> map = new HashMap<>();
 
 }
