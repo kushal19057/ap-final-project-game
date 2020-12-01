@@ -10,22 +10,22 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
+import java.io.Serializable;
 
 public class CircleObstacle extends Obstacle {
-	private List<Arc> listOfArcs;
-	private List<Rotate> listOfRotate;
-	private static final int INIT_CENTER_X = Constants.GAME_WIDTH/2;
-	private static final int INIT_ANGLE = 1;
-	private static final int ARC_RADIUS = 150;
-	private static final int ARC_LENGTH = 75;
-	private static final int STROKE_WIDTH = 25;
-	private int angle;
+	private transient List<Arc> listOfArcs;
+	private transient List<Rotate> listOfRotate;
+
+	private static final double ARC_RADIUS = 175;
+	private static final double ARC_LENGTH = 75;
+	private static final double STROKE_WIDTH = 25;
+	private double angle;
 	
-	public CircleObstacle(int _y) {
-		super(INIT_CENTER_X, _y);
+	public CircleObstacle(double _y) {
+		super(Constants.GAME_WIDTH/2, _y);
 		listOfArcs = new ArrayList<>();
 		listOfRotate = new ArrayList<>();
-		angle = INIT_ANGLE;
+		angle = 1.5;
 		initArcs();
 		initRotate();
 	}
@@ -66,8 +66,8 @@ public class CircleObstacle extends Obstacle {
 			gamePane.getChildren().add(arc);
 		}
 	}
-	
-	public void setPositionY(int currentPositonY) {
+
+	public void setPositionY(double currentPositonY) {
 		super.setPositionY(currentPositonY);
 		for(Arc arc : listOfArcs) {
 			arc.setCenterY(currentPositonY);

@@ -25,7 +25,7 @@ public class ColorSwitchButton extends Button {
             setFont(Font.loadFont(new FileInputStream(Constants.FONT_PATH), 25));
         } catch (FileNotFoundException e) {
             System.out.println("Cant load font");
-            setFont(Font.font("Vardana", 25));
+            setFont(Font.font("arial", 25));
         }
     }
 

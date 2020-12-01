@@ -1,13 +1,13 @@
 package application;
 
 import java.util.List;
-
 import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
+import java.io.Serializable;
 
 public abstract class Obstacle extends Actor{
-	public Obstacle(int x, int y) {
+	public Obstacle(double x, double y) {
 		super(x, y);
 	}
 	public abstract void addElementsToGamePane(AnchorPane pane);

@@ -2,16 +2,17 @@ package application;
 
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import java.io.Serializable;
 
 public class Star extends Actor {
 	private ImageView starImage;
 	
-	public Star(int x, int y) {
+	public Star(double x, double y) {
 		super(x, y);
 	}
 	
-	public Star(int y) {
-		this(Constants.GAME_WIDTH/2 - 27, y);
+	public Star(double y) {
+		this(Constants.GAME_WIDTH/2 - 25, y);
 		starImage = new ImageView(Constants.STAR_PATH);
 		starImage.setLayoutX(currentPositionX);
 		starImage.setLayoutY(currentPositionY);
@@ -21,7 +22,7 @@ public class Star extends Actor {
 	}
 	
 	@Override
-	public void setPositionY(int y) {
+	public void setPositionY(double y) {
 		super.setPositionY(y);
 		starImage.setLayoutY(y);
 	}

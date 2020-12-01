@@ -1,14 +1,15 @@
 package application;
-
+import java.io.Serializable;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-import com.sun.javafx.collections.MappingChange.Map;
-
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -33,10 +34,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class Game {    
-    private AnchorPane gamePane;
-    private Scene gameScene;
-    private Stage gameStage;
+public class Game{
+    private  AnchorPane gamePane;
+    private  Scene gameScene;
+    private  Stage gameStage;
+    
+    private  PauseMenu pauseMenuManager;
     
     private Ball ball;
     
@@ -44,17 +47,17 @@ public class Game {
     private List<ColorSwitch> listOfColorSwitchers;
     private List<Star> listOfStars;
     
-    private Label pointsLabel;
+    private  Label pointsLabel;
     
     private Random random;
     
     private int currentScore;
     
-    private int currentPositionY;
-    private int currentVelocityY;
-    private int gravity;
+    private double currentPositionY;
+    private double currentVelocityY;
+    private double gravity;
     
-    private Timeline ballTimeline;
+    private  Timeline ballTimeline;
     private int numObstacles;
     
     private boolean firstSpace;
@@ -72,19 +75,17 @@ public class Game {
     }
     
     private void initConstants() {
+    	pauseMenuManager = new PauseMenu(this);
     	currentScore = 0;
-    	gravity = 0;
+    	gravity = 0d;
     	firstSpace = false;
     	random = new Random();
     	listOfObstacles = new ArrayList<>();
     	listOfColorSwitchers = new ArrayList<>();
     	listOfStars = new ArrayList<>();
-    	pointsLabel = new Label("POINTS: 00");
+    	pointsLabel = new Label("# 00");
     	numObstacles = 1;
-		Constants.map.put(0,Color.AQUA);
-		Constants.map.put(1,Color.HOTPINK);
-		Constants.map.put(2,Color.YELLOW);
-		Constants.map.put(3,Color.INDIGO);
+
     }
     
     private void initStage() {
@@ -96,27 +97,30 @@ public class Game {
     
     private void initGameElements() {
     	ball = new Ball(gamePane);
+    	
     	currentPositionY = ball.getPositionY();
     	currentVelocityY = ball.getVelocityY();
     	
     	pointsLabel.setLayoutX(10);
     	pointsLabel.setLayoutY(10);
-    	pointsLabel.setFont(Font.font("arial", FontWeight.BOLD, 40));
-    	pointsLabel.setTextFill(Color.ALICEBLUE);
+    	pointsLabel.setFont(Font.font("arial", FontWeight.BOLD, 50));
+    	pointsLabel.setTextFill(Color.AZURE);
     	gamePane.getChildren().add(pointsLabel);
     	
+    	// generate initial obstacles, stars and color switchers
     	topmost = generateObstacleRandomly(Constants.GAME_HEIGHT/2);
-    	int current = topmost.getPositionY();
+    	double current = topmost.getPositionY();
     	listOfObstacles.add(topmost);
     	listOfColorSwitchers.add(new ColorSwitch(current));
     	listOfStars.add(new Star(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
-    	while(topmost.getPositionY() >= 0) {
+    	while(topmost.getPositionY() > 0) {
     		current = current - Constants.DISTANCE_BETWEEN_OBSTACLES;
     		topmost = generateObstacleRandomly(current);
     		listOfObstacles.add(topmost);
     		listOfColorSwitchers.add(new ColorSwitch(current));
     		listOfStars.add(new Star(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
     	}
+    	
     	// add game elements to the pane
     	for(Obstacle o : listOfObstacles) {
     		o.addElementsToGamePane(gamePane);
@@ -129,9 +133,12 @@ public class Game {
     	}
     }
     
-    private Obstacle generateObstacleRandomly(int y) {
+    private Obstacle generateObstacleRandomly(double y) {
     	int n = random.nextInt(numObstacles);
     	// generate random obstacles and return reference using a switch case block
+    	// double concentric 
+    	// triple concentric
+    	// 3 face obstacle(ball moves through center only though)
     	Obstacle obstacle = new CircleObstacle(y);
     	return obstacle;
     }
@@ -148,15 +155,16 @@ public class Game {
     			obstacle.rotate();
     		}
     		// update position of ball
-    		int updatedVelocityY = currentVelocityY + gravity;
-    		int updatedPositionY = currentPositionY + updatedVelocityY;
-    		int dy = 0;
+    		double updatedVelocityY = currentVelocityY + gravity;
+    		double updatedPositionY = currentPositionY + updatedVelocityY;
+    		double dy = 0;
     		if(updatedPositionY < Constants.GAME_HEIGHT/2) {
+    		    // if the ball tries to jump above game height, stop it from doing so
     			dy = Constants.GAME_HEIGHT/2 - updatedPositionY;
     			currentPositionY = Constants.GAME_HEIGHT/2;
     		} else {
     			currentPositionY = updatedPositionY;
-    		}
+    		} 
     		currentVelocityY = updatedVelocityY;
     		ball.setVelocity(currentVelocityY);
     		ball.setPositionY(currentPositionY);
@@ -164,10 +172,9 @@ public class Game {
     		lowerObstaclesAndCollectables(dy);
     		// check if ball below screen
     		if(currentPositionY > Constants.GAME_HEIGHT) {
-    			System.out.println("GAME OVER");
-    			ballTimeline.pause();
+    			gameOver();
+    		    //obstacleCollision();
     		}
-    		//XXX check for collision
     		checkShapeIntersection(ball.getCircle());
     		// generate new obstacles and collectables
     		generateNewObstacleAndCollectables();
@@ -176,7 +183,24 @@ public class Game {
     	}
     }
     
-    private void lowerObstaclesAndCollectables(int delta) {
+    private void obstacleCollision() {
+        // XXX this is redundant
+        gameOver();
+    }
+    
+    
+    private void gameOver() {
+        currentPositionY -= 75;
+        currentPositionY -= 80;
+        currentVelocityY = 0;
+        gravity = 0;
+        firstSpace = false;
+        ballTimeline.stop();
+        checkForRevival();
+        
+    }
+    
+    private void lowerObstaclesAndCollectables(double delta) {
     	for(Obstacle o : listOfObstacles) {
     		o.setPositionY(o.getPositionY() + delta);
     	}
@@ -196,12 +220,15 @@ public class Game {
     			Shape intersect = Shape.intersect(block, arc);
     			if(intersect.getBoundsInLocal().getWidth() != -1) {
     				if(block.getFill().equals(arc.getStroke())) {
-    					// nothing
+    					// nothing. XXX remove this logic later
+    				    collisionDetected = true;
+    				    break;
     				} else {
     					// this is the correct logic
     					// the ball passes through the same color only
-    					collisionDetected = true;
-    					break;
+    					// commenting so that i can play game
+    					//collisionDetected = true;
+    					//break;
     				}
     			}
     		}
@@ -211,16 +238,10 @@ public class Game {
     		}
     	}
     	
-    	// assert collisionDetected = false
-    	
-    	// check for Collectables
     	collisionDetected = false;
     	Iterator<ColorSwitch> iter = listOfColorSwitchers.iterator();
     	while(iter.hasNext()) {
     		ColorSwitch c = iter.next();
-    		// XXX try the brown approach of check intersection with bounds
-    		// otherwise use case by case method
-    		
     		// check for ColorSwitch
     		for(Shape arc : c.getElements()) {
     			Shape intersect = Shape.intersect(block, arc);
@@ -244,40 +265,41 @@ public class Game {
     		Star s = iterstar.next();
     		if(Constants.BALL_RADIUS + Constants.STAR_RADIUS > calculateDistance(ball.getPositionY(), s.getPositionY())) {
     			currentScore++;
-    			String text = "POINTS: ";
-    			if(currentScore < 10) {
-    				text = text + "0";
-    			}
-    			text = text + currentScore;
-    			pointsLabel.setText(text);
+    			updateScoreLabel();
     			// remove this star graphically and logically
     			iterstar.remove();
-    			s.removeFromPane(gamePane); // XXXkchecl
+    			s.removeFromPane(gamePane); 
     		}
     	}
     }
     
-    private int calculateDistance(int y1, int y2) {
+    private double calculateDistance(double y1, double y2) {
     	return Math.abs(y1 - y2);
     	
     }
     
-    private void obstacleCollision() {
-    	// helper method
-    	System.out.println("Collision");
-		currentPositionY -= 80;
-		currentVelocityY = 0;
-		gravity = 0;
-		firstSpace = false;
-		ballTimeline.stop();
-		gameStage.close();
-		System.out.println(currentScore);
-		// add revive option
-		//ballTimeline.pause();
+
+    private void checkForRevival() {
+    	if(currentScore > Constants.THRESHOLD_SCORE_REVIVAL) {
+    		currentScore -= Constants.THRESHOLD_SCORE_REVIVAL;
+    		updateScoreLabel();
+    		resumeGame();
+    	} else {
+    		gameStage.close();
+    	}
+    }
+    
+    private void updateScoreLabel() {
+    	String text = "# ";
+		if(currentScore < 10) {
+			text = text + "0";
+		}
+		text = text + currentScore;
+		pointsLabel.setText(text);
     }
     
     private void generateNewObstacleAndCollectables() {
-    	int topY = topmost.getPositionY();
+    	double topY = topmost.getPositionY();
     	if(topY > Constants.HEIGHT_AFTER_WHICH_OBSTACLE_GENERATE) {
     		// generate obstacle
     		topmost = generateObstacleRandomly(topY - Constants.DISTANCE_BETWEEN_OBSTACLES);
@@ -294,7 +316,7 @@ public class Game {
     		s1.addElementsToGamePane(gamePane);
     	}
     }
-//    
+ 
     private void removeOffScreenObstacles() {
     	// remove the obstacle/collectable graphically and logically
     	// obstacle
@@ -328,13 +350,21 @@ public class Game {
                     currentVelocityY = -20;
                 }
                 
-                if( keyEvent.getCode() == KeyCode.R) {
-                	keyEvent.consume();
-                	System.out.println("R pressed");
-                	ballTimeline.play();
+                if(keyEvent.getCode() == KeyCode.P) {
+                	ballTimeline.pause();
+                	gamePane.setFocusTraversable(false);
+                	pauseMenuManager.showPauseMenu();
+                	
                 }
             }
         });
+    }
+    
+    public void resumeGame() {
+    	firstSpace = false;
+    	currentVelocityY = 0;
+    	gravity = 0;
+    	ballTimeline.play();
     }
     
 
@@ -342,6 +372,10 @@ public class Game {
         Image backgroundImage = new Image("resources/deep_blue.png", 256, 256, false, true);
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
         gamePane.setBackground(new Background(background));
+    }
+    
+    public void closeStage() {
+    	gameStage.close();
     }
 }
 

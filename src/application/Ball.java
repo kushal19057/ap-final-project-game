@@ -1,18 +1,13 @@
 package application;
 
-import java.util.HashMap;
-import java.util.Random;
-
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 
 public class Ball extends Actor{
 	private int color;
-	private int velocityY;
-	private Circle circle;
-	private AnchorPane gamePane;
+	private double velocityY;
+	private  Circle circle;
+	private  AnchorPane gamePane;
 	
 	public Ball(AnchorPane pane) {
 		super(Constants.GAME_WIDTH/2, Constants.GAME_HEIGHT - Constants.START_DELTA_BALL);
@@ -28,11 +23,11 @@ public class Ball extends Actor{
 		gamePane.getChildren().add(circle);
 	}
 
-	public int getVelocityY() {
+	public double getVelocityY() {
 		return velocityY;
 	}
 	
-	public void setVelocity(int v) {
+	public void setVelocity(double v) {
 		this.velocityY = v;
 	}
 	
@@ -40,7 +35,7 @@ public class Ball extends Actor{
 		return circle;
 	}
 	@Override
-	public void setPositionY(int y) {
+	public void setPositionY(double y) {
 		super.setPositionY(y);
 		circle.setCenterY(y);
 	}

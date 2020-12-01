@@ -1,24 +1,50 @@
 package application;
 
+import javafx.animation.Animation;
+import javafx.animation.FadeTransition;
+import javafx.animation.KeyFrame;
+import javafx.animation.ParallelTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.*;
-
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
+import javafx.scene.shape.ArcType;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Duration;
 
-
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class MainMenu extends Application {
 
@@ -27,24 +53,32 @@ public class MainMenu extends Application {
     private AnchorPane mainMenuPane;
 
     private Game gameManager;
-
-    private Stage loadGameStage;
-    private Scene loadGameScene;
-    private AnchorPane loadGamePane;
-    
-    private Stage helpStage;
-    private Scene helpScene;
-    private AnchorPane helpPane;
-    
-    // try to show a double pendulum in the main menu. if time permits.
-    
-//    private Circle ball;
-//    private int centerX = 280, centerY = 220;
-//    private int radius = 50;
-//    private int xStep = 8, yStep = 15;
+    private VBox loadGamePane;
 
     private List<ColorSwitchButton> menuButtons;
-
+    
+    private List<Arc> listOfOuterArcs = new ArrayList<>();
+    private List<Rotate> listOfOuterRotate = new ArrayList<>();
+    private List<Arc> listOfMiddleArcs = new ArrayList<>();
+    private List<Rotate> listOfMiddleRotate = new ArrayList<>();
+    private List<Arc> listOfInnerArcs = new ArrayList<>();
+    private List<Rotate> listOfInnerRotate = new ArrayList<>();
+    
+    private Circle circleParallelDown = new Circle(300, 350, 50);
+    private Circle circleParallelUp = new Circle(300, 350, 50);
+    
+    private FadeTransition fadeTransitionDown = new FadeTransition(Duration.millis(2000), circleParallelDown);
+    private FadeTransition fadeTransitionUp = new FadeTransition(Duration.millis(2000), circleParallelUp);
+    
+    private TranslateTransition translateTransitionDown = new TranslateTransition(Duration.millis(2000), circleParallelDown);
+    private TranslateTransition translateTransitionUp = new TranslateTransition(Duration.millis(2000), circleParallelUp);
+    
+    private ScaleTransition scaleTransitionDown = new ScaleTransition(Duration.millis(2000), circleParallelDown);
+    private ScaleTransition scaleTransitionUp = new ScaleTransition(Duration.millis(2000), circleParallelUp);
+    
+    private ParallelTransition parallelTransitionDown = new ParallelTransition();
+    private ParallelTransition parallelTransitionUp = new ParallelTransition();
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -52,89 +86,154 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            mainMenuStage = primaryStage;
             initMainMenu();
-            primaryStage = mainMenuStage;
             primaryStage.show();
-            initLoadGameStage(mainMenuStage);
-            initHelpStage(mainMenuStage);
-
         } catch(Exception e) {
             e.printStackTrace();
         }
-    }
-    
-    private void initHelpStage(Stage parent) {
-    	helpPane = new AnchorPane();
-    	helpScene = new Scene(helpPane, Constants.MAIN_MENU_OPTION_WIDTH, Constants.MAIN_MENU_OPTION_HEIGHT);
-    	helpStage = new Stage();
-    	helpStage.setTitle("Help");
-    	helpStage.setScene(helpScene);
-    	helpStage.initModality(Modality.APPLICATION_MODAL);
-    	helpStage.initOwner(parent);
-    	helpStage.initStyle(StageStyle.UTILITY);
-    	Text text = new Text("Here we will display rules of the game, misc. facts and a short description of the creators.");
-    	text.setFont(Font.font("Arial", FontWeight.BOLD, 36));
-    	text.setWrappingWidth(200);
-    	text.setX(50);
-    	text.setY(50);
-    	helpPane.getChildren().add(text);
-    }
-
-    private void initLoadGameStage(Stage parent) {
-        loadGamePane = new AnchorPane();
-        loadGameScene = new Scene(loadGamePane, Constants.MAIN_MENU_OPTION_WIDTH, Constants.MAIN_MENU_OPTION_HEIGHT);
-        loadGameStage = new Stage();
-        loadGameStage.setTitle("Load Game");
-        loadGameStage.setScene(loadGameScene);
-        loadGameStage.initModality(Modality.APPLICATION_MODAL);
-        loadGameStage.initOwner(parent);
-        loadGameStage.initStyle(StageStyle.UTILITY);
-        Text text = new Text("Here we will display prev. saved games");
-        text.setFont(Font.font("Arial", FontWeight.BOLD, 36));
-        text.setWrappingWidth(200);
-        text.setX(50);
-        text.setY(50);
-        loadGamePane.getChildren().add(text);
     }
 
     private void initMainMenu() {
         mainMenuPane = new AnchorPane();
         mainMenuScene = new Scene(mainMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
-        mainMenuStage = new Stage();
         mainMenuStage.setTitle("Main Menu");
         mainMenuStage.setScene(mainMenuScene);
         menuButtons = new ArrayList<>();
-        //createBall();
         createButtons();
         createBackground();
         createLogo();
+        createAnimation();
     }
     
-//    private void createBall() {
-//    	ball = new Circle(centerX, centerY, radius, Color.HOTPINK);
-//    	ball.setEffect(new DropShadow());
-//    	mainMenuPane.getChildren().addAll(ball);
-//    	Timeline loop = new Timeline(new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), evt -> {
-//    		centerX += xStep;
-//    		centerY += yStep;
-//    		if(centerX + radius > Constants.MENU_WIDTH || centerX - radius < 0) {
-//    			xStep = -xStep;
-//    		}
-//    		if(centerY + radius > Constants.MENU_HEIGHT || centerY - radius < 0) {
-//    			yStep = -yStep;
-//    		}
-//    		ball.setCenterX(centerX);
-//    		ball.setCenterY(centerY);
-//    	}));
-//    	loop.setCycleCount(Timeline.INDEFINITE);
-//    	loop.play();
-//    	
-//    }
+    private void createAnimation() {
+        Constants.map.put(0,Color.AQUA);
+        Constants.map.put(1,Color.HOTPINK);
+        Constants.map.put(2,Color.YELLOW);
+        Constants.map.put(3,Color.INDIGO);
+        
+        mainMenuPane.getChildren().add(circleParallelDown);
+        mainMenuPane.getChildren().add(circleParallelUp);
+        circleParallelDown.setFill(Color.AZURE);
+        circleParallelUp.setFill(Color.BEIGE);
+
+        fadeTransitionDown.setFromValue(1.0f);
+        fadeTransitionDown.setToValue(0.3f);
+        fadeTransitionDown.setCycleCount(2);
+        fadeTransitionDown.setAutoReverse(true);
+        
+        fadeTransitionUp.setFromValue(1.0f);
+        fadeTransitionUp.setToValue(0.3f);
+        fadeTransitionUp.setCycleCount(2);
+        fadeTransitionUp.setAutoReverse(true);
+
+        translateTransitionDown.setFromY(0);
+        translateTransitionDown.setToY(200);
+        translateTransitionDown.setCycleCount(2);
+        translateTransitionDown.setAutoReverse(true);
+        
+        translateTransitionUp.setFromY(0);
+        translateTransitionUp.setToY(-200);
+        translateTransitionUp.setCycleCount(2);
+        translateTransitionUp.setAutoReverse(true);
+
+        scaleTransitionDown.setToX(2f);
+        scaleTransitionDown.setToY(2f);
+        scaleTransitionDown.setCycleCount(2);
+        scaleTransitionDown.setAutoReverse(true);
+        
+        scaleTransitionUp.setToX(2f);
+        scaleTransitionUp.setToY(2f);
+        scaleTransitionUp.setCycleCount(2);
+        scaleTransitionUp.setAutoReverse(true);
+    
+        parallelTransitionDown.getChildren().addAll(
+            fadeTransitionDown,
+            translateTransitionDown,
+            scaleTransitionDown
+         );
+        
+        parallelTransitionUp.getChildren().addAll(
+                fadeTransitionUp,
+                translateTransitionUp,
+                scaleTransitionUp
+             );
+        parallelTransitionDown.setCycleCount(Timeline.INDEFINITE);
+        parallelTransitionUp.setCycleCount(Timeline.INDEFINITE);
+        
+        parallelTransitionDown.play();
+        parallelTransitionUp.play();
+        
+        for(int i=0;i<4;i++) {
+            Arc arc = new Arc(300, 350, 150, 150, i * 90, 60);
+            listOfOuterArcs.add(arc);
+            arc.setFill(Color.TRANSPARENT);
+            arc.setStroke(Constants.map.get(i));
+            arc.setStrokeWidth(20);
+            arc.setType(ArcType.OPEN);
+            mainMenuPane.getChildren().add(arc);
+        }
+        for(int i=0;i<4;i++) {
+            Arc arc = new Arc(300, 350, 120, 120, i * 90, 60);
+            listOfMiddleArcs.add(arc);
+            arc.setFill(Color.TRANSPARENT);
+            arc.setStroke(Constants.map.get(i));
+            arc.setStrokeWidth(20);
+            arc.setType(ArcType.OPEN);
+            mainMenuPane.getChildren().add(arc);
+        }
+        for(int i=0;i<4;i++) {
+            Arc arc = new Arc(300, 350, 90, 90, i * 90, 60);
+            listOfInnerArcs.add(arc);
+            arc.setFill(Color.TRANSPARENT);
+            arc.setStroke(Constants.map.get(i));
+            arc.setStrokeWidth(20);
+            arc.setType(ArcType.OPEN);
+            mainMenuPane.getChildren().add(arc);
+        }
+        
+        for(int i=0;i<4;i++) {
+            Rotate rotate = new Rotate();
+            listOfOuterRotate.add(rotate);
+            rotate.setPivotX(300);
+            rotate.setPivotY(350);
+            rotate.setAngle(3.5);
+        }
+        for(int i=0;i<4;i++) {
+            Rotate rotate = new Rotate();
+            listOfMiddleRotate.add(rotate);
+            rotate.setPivotX(300);
+            rotate.setPivotY(350);
+            rotate.setAngle(3);
+        }
+        for(int i=0;i<4;i++) {
+            Rotate rotate = new Rotate();
+            listOfInnerRotate.add(rotate);
+            rotate.setPivotX(300);
+            rotate.setPivotY(350);
+            rotate.setAngle(2.5);
+        }
+        KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new TimeHandler());
+        Timeline timeline = new Timeline(kf);
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+
+    private class TimeHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            for(int i=0;i<4;i++) {
+                listOfInnerArcs.get(i).getTransforms().add(listOfInnerRotate.get(i));
+                listOfMiddleArcs.get(i).getTransforms().add(listOfMiddleRotate.get(i));
+                listOfOuterArcs.get(i).getTransforms().add(listOfOuterRotate.get(i));
+            }
+        }
+    }
 
     private void createButtons() {
         createStartButton();
         createLoadGameButton();
-        createHelpButton();
         createExitButton();
     }
 
@@ -158,19 +257,16 @@ public class MainMenu extends Application {
         loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                loadGameStage.show();
-            }
-        });
-    }
-
-    private void createHelpButton() {
-        ColorSwitchButton helpButton = new ColorSwitchButton("HELP");
-        addMenuButton(helpButton);
-
-        helpButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent) {
-            	helpStage.show();
+                loadGamePane = new VBox();
+                Button button = new Button("Back to main menu");
+                loadGamePane.getChildren().add(button);
+                button.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent actionEvent) {
+                        mainMenuScene.setRoot(mainMenuPane);
+                    }
+                });
+                mainMenuScene.setRoot(loadGamePane);
             }
         });
     }
@@ -189,8 +285,8 @@ public class MainMenu extends Application {
     }
 
     private void addMenuButton(ColorSwitchButton button) {
-        button.setLayoutX(Constants.MENU_BUTTONS_START_X);
-        button.setLayoutY(Constants.MENU_BUTTONS_START_Y + menuButtons.size() * 100);
+        button.setLayoutX(Constants.MENU_BUTTONS_START_X );
+        button.setLayoutY(Constants.MENU_BUTTONS_START_Y + menuButtons.size() * 60);
         menuButtons.add(button);
         mainMenuPane.getChildren().add(button);
     }
@@ -203,7 +299,7 @@ public class MainMenu extends Application {
 
     private void createLogo() {
         ImageView logo = new ImageView("resources/colorswitchlogo.png");
-        logo.setLayoutX(185);
+        logo.setLayoutX(160);
         logo.setLayoutY(30);
         mainMenuPane.getChildren().add(logo);
     }

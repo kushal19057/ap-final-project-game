@@ -1,17 +1,18 @@
 package application;
 
-public abstract class Actor {
-	protected int currentPositionX, currentPositionY;
-	public Actor(int x, int y) {
+
+public abstract class Actor{
+	protected double currentPositionX, currentPositionY;
+	public Actor(double x, double y) {
 		currentPositionX = x;
 		currentPositionY = y;
 	}
 	
-	public int getPositionY() {
+	public double getPositionY() {
 		return currentPositionY;
 	}
 	
-	public void setPositionY(int y) {
+	public void setPositionY(double y) {
 		currentPositionY = y;
 	}
 
