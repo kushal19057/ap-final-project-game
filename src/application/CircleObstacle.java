@@ -13,16 +13,16 @@ import javafx.scene.transform.Rotate;
 import java.io.Serializable;
 
 public class CircleObstacle extends Obstacle {
-	private transient List<Arc> listOfArcs;
-	private transient List<Rotate> listOfRotate;
+	private  List<Arc> listOfArcs;
+	private  List<Rotate> listOfRotate;
 
-	private static final double ARC_RADIUS = 175;
-	private static final double ARC_LENGTH = 75;
-	private static final double STROKE_WIDTH = 25;
+	private static final double ARC_RADIUS = 175d;
+	private static final double ARC_LENGTH = 75d;
+	private static final double STROKE_WIDTH = 25d;
 	private double angle;
 	
-	public CircleObstacle(double _y) {
-		super(Constants.GAME_WIDTH/2, _y);
+	public CircleObstacle(double y) {
+		super(Constants.GAME_WIDTH/2, y);
 		listOfArcs = new ArrayList<>();
 		listOfRotate = new ArrayList<>();
 		angle = 1.5;

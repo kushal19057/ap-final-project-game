@@ -84,7 +84,7 @@ public class Game{
     	listOfColorSwitchers = new ArrayList<>();
     	listOfStars = new ArrayList<>();
     	pointsLabel = new Label("# 00");
-    	numObstacles = 1;
+    	numObstacles = 3;
 
     }
     
@@ -117,8 +117,8 @@ public class Game{
     		current = current - Constants.DISTANCE_BETWEEN_OBSTACLES;
     		topmost = generateObstacleRandomly(current);
     		listOfObstacles.add(topmost);
-    		listOfColorSwitchers.add(new ColorSwitch(current));
-    		listOfStars.add(new Star(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+    		listOfColorSwitchers.add(new ColorSwitch(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+    		listOfStars.add(new Star(current));
     	}
     	
     	// add game elements to the pane
@@ -139,8 +139,15 @@ public class Game{
     	// double concentric 
     	// triple concentric
     	// 3 face obstacle(ball moves through center only though)
-    	Obstacle obstacle = new CircleObstacle(y);
-    	return obstacle;
+    	if(n == 0) {
+    	    return new CircleObstacle(y);
+    	} else if (n == 1){
+    	    return new ConcentricCircleObstacle(y);
+    	} else if (n==2) {
+    	    return new DoubleCircleObstacle(y);
+    	} else {
+    	    return new CircleObstacle(y);
+    	}
     }
 
     private void setupBallTimeline() {
@@ -307,11 +314,11 @@ public class Game{
     		topmost.addElementsToGamePane(gamePane);
     		topY = topmost.getPositionY();
     		// corresponding to this obstacle, generate a color switch and star
-    		ColorSwitch c1 = new ColorSwitch(topY);
+    		ColorSwitch c1 = new ColorSwitch(topY - Constants.DISTANCE_BETWEEN_OBSTACLES/2);
     		listOfColorSwitchers.add(c1);
     		c1.addElementsToGamePane(gamePane);
     		// corresponding to this , generate a star
-    		Star s1 = new Star(topY - Constants.DISTANCE_BETWEEN_OBSTACLES/2);
+    		Star s1 = new Star(topY );
     		listOfStars.add(s1);
     		s1.addElementsToGamePane(gamePane);
     	}

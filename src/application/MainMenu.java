@@ -213,10 +213,12 @@ public class MainMenu extends Application {
             rotate.setPivotY(350);
             rotate.setAngle(2.5);
         }
-        KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new TimeHandler());
-        Timeline timeline = new Timeline(kf);
-        timeline.setCycleCount(Animation.INDEFINITE);
-        timeline.play();
+        // XXX pause this. this causes preformance drop in game.
+        // XXX or remove the game stage in total
+        //KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new TimeHandler());
+        //Timeline timeline = new Timeline(kf);
+        //timeline.setCycleCount(Animation.INDEFINITE);
+        //timeline.play();
     }
 
 
