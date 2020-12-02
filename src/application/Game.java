@@ -24,7 +24,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Arc;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -84,8 +86,6 @@ public class Game{
     	listOfColorSwitchers = new ArrayList<>();
     	listOfStars = new ArrayList<>();
     	pointsLabel = new Label("# 00");
-    	numObstacles = 3;
-
     }
     
     private void initStage() {
@@ -134,19 +134,17 @@ public class Game{
     }
     
     private Obstacle generateObstacleRandomly(double y) {
-    	int n = random.nextInt(numObstacles);
-    	// generate random obstacles and return reference using a switch case block
-    	// double concentric 
-    	// triple concentric
-    	// 3 face obstacle(ball moves through center only though)
-    	if(n == 0) {
+    	if(currentScore < 2) {
     	    return new CircleObstacle(y);
-    	} else if (n == 1){
-    	    return new ConcentricCircleObstacle(y);
-    	} else if (n==2) {
+    	} else if(currentScore < 4) {
+    	    return new SquareObstacle(y);
+    	} else if(currentScore < 6) {
     	    return new DoubleCircleObstacle(y);
+    	} else if(currentScore < 8) {
+    	    return new ConcentricCircleObstacle(y);
     	} else {
-    	    return new CircleObstacle(y);
+    	    // now randomly throw obstacles XXX change this
+    	    return new SquareObstacle(y);
     	}
     }
 
@@ -187,6 +185,7 @@ public class Game{
     		generateNewObstacleAndCollectables();
     		// remove old obstacles and collectables( there wont be any collectables since we consume them)
     		removeOffScreenObstacles();
+    		increaseDifficulty();
     	}
     }
     
@@ -223,19 +222,22 @@ public class Game{
     	boolean collisionDetected = false;
     	// check for obstacles
     	for (Obstacle obstacle : listOfObstacles) {
-    		for(Shape arc : obstacle.getElements()) {
-    			Shape intersect = Shape.intersect(block, arc);
+    		for(Shape current : obstacle.getElements()) {
+    			Shape intersect = Shape.intersect(block, current);
     			if(intersect.getBoundsInLocal().getWidth() != -1) {
-    				if(block.getFill().equals(arc.getStroke())) {
+    			    if(current instanceof Arc && block.getFill().equals(current.getStroke())) {
+    			        // this is ulta logic . reverse it later XXX
+    			        collisionDetected = true;
+    			        break;
+    			    } else if(current instanceof Rectangle && block.getFill().equals(current.getFill())) {
+    			        // this is ulta logic, reverse XXX
+    			        collisionDetected = true;
+    			        break;
+    			    }
+    				if(block.getFill().equals(current.getStroke())) {
     					// nothing. XXX remove this logic later
     				    collisionDetected = true;
     				    break;
-    				} else {
-    					// this is the correct logic
-    					// the ball passes through the same color only
-    					// commenting so that i can play game
-    					//collisionDetected = true;
-    					//break;
     				}
     			}
     		}
@@ -335,6 +337,12 @@ public class Game{
     			current.removeFromPane(gamePane);
     		}
     	}
+    }
+    
+    private void increaseDifficulty() {
+       for(Obstacle o : listOfObstacles) {
+           o.increaseDifficulty((int)currentScore);
+       }
     }
 
     public void createNewGame(Stage menuStage) {

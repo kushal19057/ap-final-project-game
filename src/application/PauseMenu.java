@@ -98,7 +98,7 @@ public class PauseMenu {
 	
 	private void initPauseMenuStage() {
     	pauseMenuPane = new AnchorPane();
-    	pauseMenuScene = new Scene(pauseMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
+    	pauseMenuScene = new Scene(pauseMenuPane, Constants.MENU_WIDTH/2, Constants.MENU_HEIGHT/2);
     	pauseMenuStage = new Stage();
     	pauseMenuStage.setTitle("Pause Menu");
     	pauseMenuStage.setScene(pauseMenuScene);
@@ -107,23 +107,23 @@ public class PauseMenu {
     }
 	
 	private void addPauseMenuButton(ColorSwitchButton button) {
-        button.setLayoutX(Constants.MENU_BUTTONS_START_X - 110);
-        button.setLayoutY(Constants.MENU_BUTTONS_START_Y - 50 + pauseMenuButtons.size() * 100);
+        button.setLayoutX(30);
+        button.setLayoutY(40 +  pauseMenuButtons.size() * 70);
         pauseMenuButtons.add(button);
         pauseMenuPane.getChildren().add(button);
     }
 	
     private void createBackground() {
-        Image backgroundImage = new Image("resources/deep_blue.png", 256, 256, false, true);
+        Image backgroundImage = new Image("resources/backgroundCastles.png");
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
         pauseMenuPane.setBackground(new Background(background));
     }
 
     private void createLogo() {
-        ImageView logo = new ImageView("resources/colorswitchlogo.png");
-        logo.setLayoutX(65);
-        logo.setLayoutY(30);
-        pauseMenuPane.getChildren().add(logo);
+//        ImageView logo = new ImageView("resources/colorswitchlogo.png");
+//        logo.setLayoutX(65);
+//        logo.setLayoutY(30);
+//        pauseMenuPane.getChildren().add(logo);
     }
     
     public void showPauseMenu() {

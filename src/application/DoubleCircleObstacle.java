@@ -15,7 +15,6 @@ public class DoubleCircleObstacle extends Obstacle {
     private List<Arc> listOfRightArcs;
     private List<Rotate> listOfLeftRotate;
     private List<Rotate> listOfRightRotate;
-    private double angle;
     
     private static final double ARC_RADIUS = 150d;
     private static final double ARC_LENGTH = 50d;
@@ -27,7 +26,6 @@ public class DoubleCircleObstacle extends Obstacle {
         listOfRightArcs = new ArrayList<>();
         listOfLeftRotate = new ArrayList<>();
         listOfRightRotate = new ArrayList<>();
-        angle = 2;
         initArcs();
         initRotate();        
     }
@@ -64,7 +62,7 @@ public class DoubleCircleObstacle extends Obstacle {
             listOfRightRotate.add(rotate);
             rotate.setPivotX(currentPositionX + ARC_RADIUS);
             rotate.setPivotY(currentPositionY);
-            rotate.setAngle(-2 * angle);
+            rotate.setAngle(1.5 * angle);
         }
     }
 
@@ -126,5 +124,7 @@ public class DoubleCircleObstacle extends Obstacle {
             r.setPivotY(currentPositionY);
         }
     }
+    
+
 
 }

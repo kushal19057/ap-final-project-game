@@ -19,13 +19,11 @@ public class CircleObstacle extends Obstacle {
 	private static final double ARC_RADIUS = 175d;
 	private static final double ARC_LENGTH = 75d;
 	private static final double STROKE_WIDTH = 25d;
-	private double angle;
 	
 	public CircleObstacle(double y) {
 		super(Constants.GAME_WIDTH/2, y);
 		listOfArcs = new ArrayList<>();
 		listOfRotate = new ArrayList<>();
-		angle = 1.5;
 		initArcs();
 		initRotate();
 	}
@@ -85,9 +83,7 @@ public class CircleObstacle extends Obstacle {
 		for(Arc arc : listOfArcs) {
 			pane.getChildren().remove(arc);
 		}
-	}
-	
-	
+	}	
 }
 
  

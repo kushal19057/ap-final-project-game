@@ -35,7 +35,7 @@ public class ColorSwitch extends Actor{
 			arc.setType(ArcType.ROUND);
 			arc.setFill(Constants.map.get(i));
 			arc.setStrokeWidth(STROKE_WIDTH);
-			arc.setStroke(Color.AZURE);
+			arc.setStroke(Color.ORANGE);
 		}
 	}
 	

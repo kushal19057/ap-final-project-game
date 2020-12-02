@@ -15,7 +15,6 @@ public class ConcentricCircleObstacle extends Obstacle {
     private List<Arc> listOfOuterArcs;
     private List<Rotate> listOfInnerRotate;
     private List<Rotate> listOfOuterRotate;
-    private double angle;
     
     private static final double INNER_ARC_RADIUS = 150d;
     private static final double OUTER_ARC_RADIUS = 175;
@@ -28,7 +27,6 @@ public class ConcentricCircleObstacle extends Obstacle {
         listOfOuterArcs = new ArrayList<>();
         listOfInnerRotate = new ArrayList<>();
         listOfOuterRotate = new ArrayList<>();
-        angle = 1.8;
         initArcs();
         initRotate();        
     }
