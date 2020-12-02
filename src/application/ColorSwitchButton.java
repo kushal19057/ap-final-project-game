@@ -6,6 +6,8 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,12 +23,7 @@ public class ColorSwitchButton extends Button {
     }
 
     private void setButtonFont() {
-        try {
-            setFont(Font.loadFont(new FileInputStream(Constants.FONT_PATH), 25));
-        } catch (FileNotFoundException e) {
-            System.out.println("Cant load font");
-            setFont(Font.font("arial", 25));
-        }
+        setFont(Font.font("Verdana", FontWeight.BOLD, 20));
     }
 
     private void setButtonPressedStyle() {

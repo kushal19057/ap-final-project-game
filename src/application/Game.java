@@ -42,6 +42,7 @@ public class Game{
     private  Stage gameStage;
     
     private  PauseMenu pauseMenuManager;
+    private  CollideMenu collideMenuManager;
     
     private Ball ball;
     
@@ -60,7 +61,6 @@ public class Game{
     private double gravity;
     
     private  Timeline ballTimeline;
-    private int numObstacles;
     
     private boolean firstSpace;
     private Obstacle topmost;
@@ -78,6 +78,7 @@ public class Game{
     
     private void initConstants() {
     	pauseMenuManager = new PauseMenu(this);
+    	collideMenuManager = new CollideMenu(this);
     	currentScore = 0;
     	gravity = 0d;
     	firstSpace = false;
@@ -111,13 +112,13 @@ public class Game{
     	topmost = generateObstacleRandomly(Constants.GAME_HEIGHT/2);
     	double current = topmost.getPositionY();
     	listOfObstacles.add(topmost);
-    	listOfColorSwitchers.add(new ColorSwitch(current));
-    	listOfStars.add(new Star(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+    	listOfColorSwitchers.add(new ColorSwitch(current  - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+    	listOfStars.add(new Star(current));
     	while(topmost.getPositionY() > 0) {
     		current = current - Constants.DISTANCE_BETWEEN_OBSTACLES;
     		topmost = generateObstacleRandomly(current);
     		listOfObstacles.add(topmost);
-    		listOfColorSwitchers.add(new ColorSwitch(current - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+    		listOfColorSwitchers.add(new ColorSwitch(current  - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
     		listOfStars.add(new Star(current));
     	}
     	
@@ -143,8 +144,20 @@ public class Game{
     	} else if(currentScore < 8) {
     	    return new ConcentricCircleObstacle(y);
     	} else {
-    	    // now randomly throw obstacles XXX change this
-    	    return new SquareObstacle(y);
+    	    int n = random.nextInt(Constants.NUMBER_OF_OBSTACLES);
+    	    if(n == 0) {
+    	        return new CircleObstacle(y);
+    	    } else if (n == 1) {
+    	        return new SquareObstacle(y);
+    	    } else if (n == 2) {
+    	        return new DoubleCircleObstacle(y);
+    	    } else if (n == 3) {
+    	        return new ConcentricCircleObstacle(y);
+    	    } else {
+    	        // should never reach this state
+    	        System.out.println("logical error.");
+    	        return new CircleObstacle(y);
+    	    }
     	}
     }
 
@@ -234,11 +247,6 @@ public class Game{
     			        collisionDetected = true;
     			        break;
     			    }
-    				if(block.getFill().equals(current.getStroke())) {
-    					// nothing. XXX remove this logic later
-    				    collisionDetected = true;
-    				    break;
-    				}
     			}
     		}
     		if(collisionDetected) {
@@ -290,12 +298,34 @@ public class Game{
 
     private void checkForRevival() {
     	if(currentScore > Constants.THRESHOLD_SCORE_REVIVAL) {
-    		currentScore -= Constants.THRESHOLD_SCORE_REVIVAL;
-    		updateScoreLabel();
+    	    showRevivePopup();
+
     		resumeGame();
     	} else {
-    		gameStage.close();
+    	    showRetryPopup();
     	}
+    }
+    
+    public void updateScoreOnRevival() {
+      currentScore -= Constants.THRESHOLD_SCORE_REVIVAL;
+      updateScoreLabel();
+    }
+    
+    private void showRevivePopup() {
+        // show options :
+        // resume for 2 gems
+        // retry from scratch
+        // back to main menu
+        // exit game
+        collideMenuManager.reviveOption();
+    }
+    
+    private void showRetryPopup() {
+        // show options
+        // retry 
+        // main menu
+        // exit game
+        collideMenuManager.restartOption();
     }
     
     private void updateScoreLabel() {
@@ -320,7 +350,7 @@ public class Game{
     		listOfColorSwitchers.add(c1);
     		c1.addElementsToGamePane(gamePane);
     		// corresponding to this , generate a star
-    		Star s1 = new Star(topY );
+    		Star s1 = new Star(topY);
     		listOfStars.add(s1);
     		s1.addElementsToGamePane(gamePane);
     	}
@@ -337,6 +367,24 @@ public class Game{
     			current.removeFromPane(gamePane);
     		}
     	}
+    	// remove offscreen stars
+    	Iterator<Star> iterStar = listOfStars.iterator();
+    	while(iterStar.hasNext()) {
+    	    Star current = iterStar.next();
+    	    if(current.getPositionY() > Constants.GAME_HEIGHT) {
+    	        iterStar.remove();
+    	        current.removeFromPane(gamePane);
+    	    }
+    	}
+    	// remove offscreen color switch
+    	Iterator<ColorSwitch> iterSwitch = listOfColorSwitchers.iterator();
+    	while(iterSwitch.hasNext()) {
+    	    ColorSwitch current = iterSwitch.next();
+    	    if(current.getPositionY() > Constants.GAME_HEIGHT) {
+    	        iterSwitch.remove();
+    	        current.removeFromPane(gamePane);
+    	    }
+    	}
     }
     
     private void increaseDifficulty() {
@@ -345,7 +393,7 @@ public class Game{
        }
     }
 
-    public void createNewGame(Stage menuStage) {
+    public void createNewGame() {
         //this.menuStage = menuStage;
         gameStage.initModality(Modality.APPLICATION_MODAL);
         gameStage.setTitle("Color Switch");

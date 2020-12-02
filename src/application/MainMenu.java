@@ -247,7 +247,7 @@ public class MainMenu extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 gameManager = new Game();
-                gameManager.createNewGame(mainMenuStage);
+                gameManager.createNewGame();
             }
         });
     }
@@ -294,13 +294,13 @@ public class MainMenu extends Application {
     }
 
     private void createBackground() {
-        Image backgroundImage = new Image("resources/deep_blue.png", 256, 256, false, true);
+        Image backgroundImage = new Image(Constants.MAIN_MENU_BACKGROUND_PATH, 256, 256, false, true);
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
         mainMenuPane.setBackground(new Background(background));
     }
 
     private void createLogo() {
-        ImageView logo = new ImageView("resources/colorswitchlogo.png");
+        ImageView logo = new ImageView(Constants.COLOR_SWITCH_LOGO_PATH);
         logo.setLayoutX(160);
         logo.setLayoutY(30);
         mainMenuPane.getChildren().add(logo);

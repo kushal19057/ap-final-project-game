@@ -10,7 +10,7 @@ public abstract class Obstacle extends Actor{
     protected double angle;
 	public Obstacle(double x, double y) {
 		super(x, y);
-		angle = 1.2;
+		angle = 1.5;
 	}
 	public abstract void addElementsToGamePane(AnchorPane pane);
 	public abstract void rotate();

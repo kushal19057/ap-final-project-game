@@ -18,9 +18,10 @@ public final class Constants {
     public static final double GRAVITY = 3; 
     public static final double VELOCITY_JUMP = -8; 
 
-    public static final String FONT_PATH = "src/resources/kenvector_future_thin.ttf";
-    public static final String STAR_PATH = "resources/star_silver.png";
-
+    public static final String STAR_PATH = "file:./src/resources/star_silver.png";
+    public static final String MAIN_MENU_BACKGROUND_PATH = "file:./src/resources/deep_blue.png";
+    public static final String COLOR_SWITCH_LOGO_PATH = "file:./src/resources/colorswitchlogo.png";
+    
     public static final String BUTTON_PRESSED_STYLE = "-fx-background-color: #f099a6;";
     public static final String BUTTON_FREE_STYLE = "-fx-background-color: #f0f8ff;";
     
@@ -40,5 +41,7 @@ public final class Constants {
     public static final int THRESHOLD_SCORE_REVIVAL = 2;
     
     public static final String FILE_START_STRING = "ColorSwitchSavedGame_";
+    
+    public static final int NUMBER_OF_OBSTACLES = 4;
 
 }

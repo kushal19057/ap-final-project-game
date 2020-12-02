@@ -32,7 +32,6 @@ public class PauseMenu {
 		pauseMenuButtons = new ArrayList<>();
 		createButtons();
 		createBackground();
-		createLogo();
 		
 	}
 	
@@ -66,7 +65,8 @@ public class PauseMenu {
 	        public void handle(ActionEvent actionEvent) {
 	            pauseMenuStage.close();
 	            gameManager.closeStage();
-	            new Game();
+	            gameManager = new Game();
+	            gameManager.createNewGame();
 	        }
 	    });
 	}
@@ -119,12 +119,6 @@ public class PauseMenu {
         pauseMenuPane.setBackground(new Background(background));
     }
 
-    private void createLogo() {
-//        ImageView logo = new ImageView("resources/colorswitchlogo.png");
-//        logo.setLayoutX(65);
-//        logo.setLayoutY(30);
-//        pauseMenuPane.getChildren().add(logo);
-    }
     
     public void showPauseMenu() {
     	pauseMenuPane.setFocusTraversable(true);
