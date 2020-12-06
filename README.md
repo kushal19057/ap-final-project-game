@@ -7,3 +7,4 @@ A JavaFX application
 - https://www.cse.iitk.ac.in/users/dsrkg/cs245/html/Guide.htm
 - http://web.mst.edu/~cpp/common/hungarian.html
 - https://en.wikipedia.org/wiki/Heisenbug
+- MITOCW 6.005
