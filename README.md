@@ -4,7 +4,4 @@
 A JavaFX application
 
 - how to add music using javafx -   https://www.javatpoint.com/javafx-playing-audio
-- https://www.cse.iitk.ac.in/users/dsrkg/cs245/html/Guide.htm
-- http://web.mst.edu/~cpp/common/hungarian.html
-- https://en.wikipedia.org/wiki/Heisenbug
-- MITOCW 6.005
+- Start tmrw, start today, start yesterday. you got this!
