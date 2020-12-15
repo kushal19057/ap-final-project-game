@@ -9,7 +9,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
-public class ConcentricCircleObstacle extends Obstacle {
+public class TripleConcentricCircleObstacle extends Obstacle {
     private List<Arc> listOfInnerArcs;
     private List<Arc> listOfMiddleArcs;
     private List<Arc> listOfOuterArcs;
@@ -26,7 +26,7 @@ public class ConcentricCircleObstacle extends Obstacle {
 
 
 
-    public ConcentricCircleObstacle(double y) {
+    public TripleConcentricCircleObstacle(double y) {
         super(Constants.GAME_WIDTH/2, y);
         listOfInnerArcs = new ArrayList<>();
         listOfMiddleArcs = new ArrayList<>();
