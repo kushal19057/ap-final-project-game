@@ -90,15 +90,7 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            
-            String path = "C:\\Users\\Rohan\\git\\p-final-project-game\\src\\resources";  //MUSIC Code updated not sure of what to add in directory though will finalise later
-        	Media media = new Media(new File(path).toURI().toString());  
-            
-        	MediaPlayer mediaPlayer = new MediaPlayer(media);  
-            
-        	mediaPlayer.setAutoPlay(true); 
-            mainMenuStage = primaryStage;
-            
+            mainMenuStage = primaryStage;    
             initMainMenu();
             gameManager = new Game();
             primaryStage.show();
@@ -108,7 +100,7 @@ public class MainMenu extends Application {
     }
 
     private void initMainMenu() {
-
+    		addMusic();
             mainMenuPane = new AnchorPane();
             mainMenuScene = new Scene(mainMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
             mainMenuStage.setTitle("Main Menu");
@@ -121,16 +113,15 @@ public class MainMenu extends Application {
     }
     
     public void addMusic() {
-//        try {
-//            Media sound = new Media(getClass().getResource("/resources/background_music.mp3").toString());
-//            mediaPlayer = new MediaPlayer(sound);
-//            mediaPlayer.setAutoPlay(true);
-//            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
-//            mediaPlayer.setStartTime(Duration.seconds(0));
-//            mediaPlayer.setStopTime(Duration.seconds(50));
-//            mediaPlayer.play();
-//        } catch(Exception e) {
-//        }
+        try {
+        	String path = "/home/kushal/eclipse-workspace/ap-final-project-game/src/resources/background_music.mp3"; 
+            Media sound = new Media(new File(path).toURI().toString());
+            mediaPlayer = new MediaPlayer(sound);
+            mediaPlayer.setAutoPlay(true);
+            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+            mediaPlayer.play();
+        } catch(Exception e) {
+        }
     }
     
     private void createAnimation() {
