@@ -89,9 +89,16 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            
+            String path = "C:\\Users\\Rohan\\git\\p-final-project-game\\src\\resources";  //MUSIC Code updated not sure of what to add in directory though will finalise later
+        	Media media = new Media(new File(path).toURI().toString());  
+            
+        	MediaPlayer mediaPlayer = new MediaPlayer(media);  
+            
+        	mediaPlayer.setAutoPlay(true); 
             mainMenuStage = primaryStage;
+            
             initMainMenu();
-            addMusic();
             gameManager = new Game();
             primaryStage.show();
         } catch(Exception e) {
