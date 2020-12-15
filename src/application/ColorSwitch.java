@@ -12,7 +12,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
-public class ColorSwitch extends Actor{
+public class ColorSwitch extends Actor implements Serializable {
 	private transient List<Arc> listOfArcs;
 	private static final int ARC_LENGTH = 80;
 	private static final int ARC_RADIUS = 30;
@@ -24,8 +24,16 @@ public class ColorSwitch extends Actor{
 	
 	public ColorSwitch(double x, double y) {
 		super(x, y);
-		listOfArcs = new ArrayList<>();
-		initArc();
+		initialise();
+	}
+	
+	private void initialise() {
+	    listOfArcs = new ArrayList<>();
+        initArc();
+	}
+	
+	public void reinitialise() {
+	    initialise();
 	}
 
 	private void initArc() {

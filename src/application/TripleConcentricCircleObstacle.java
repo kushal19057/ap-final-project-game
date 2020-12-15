@@ -1,5 +1,6 @@
 package application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.layout.AnchorPane;
@@ -9,7 +10,7 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
-public class TripleConcentricCircleObstacle extends Obstacle {
+public class TripleConcentricCircleObstacle extends Obstacle implements Serializable {
     private List<Arc> listOfInnerArcs;
     private List<Arc> listOfMiddleArcs;
     private List<Arc> listOfOuterArcs;
@@ -28,6 +29,11 @@ public class TripleConcentricCircleObstacle extends Obstacle {
 
     public TripleConcentricCircleObstacle(double y) {
         super(Constants.GAME_WIDTH/2, y);
+        initialise();
+    
+    }
+    
+    private void initialise() {
         listOfInnerArcs = new ArrayList<>();
         listOfMiddleArcs = new ArrayList<>();
         listOfOuterArcs = new ArrayList<>();
@@ -37,7 +43,7 @@ public class TripleConcentricCircleObstacle extends Obstacle {
         listOfOuterRotate = new ArrayList<>();
 
         initArcs();
-        initRotate();        
+        initRotate();    
     }
     
     private void initArcs() {
@@ -170,5 +176,11 @@ public class TripleConcentricCircleObstacle extends Obstacle {
             r.setPivotY(currentPositionY);
         }
     }
+    
+    @Override
+    public void reinitialise() {
+    	initialise();
+    }
+
 
 }

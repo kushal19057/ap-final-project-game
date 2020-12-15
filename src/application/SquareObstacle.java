@@ -1,5 +1,6 @@
 package application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,18 +11,27 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
-public class SquareObstacle extends Obstacle{
-    private List<Rectangle> listOfRectangles;
-    private List<Rotate> listOfRotates;
+public class SquareObstacle extends Obstacle implements Serializable {
+    private transient List<Rectangle> listOfRectangles;
+    private transient List<Rotate> listOfRotates;
     public static final double LENGTH = 300;
     public static final double WIDTH = 30;
     
     public SquareObstacle(double y) {
         super(Constants.GAME_WIDTH/2, y);
+        initialise();
+    }
+    
+    private void initialise() {
         listOfRectangles = new ArrayList<>();
         listOfRotates = new ArrayList<>();
         initRectangles();
         initRotate();
+    }
+    
+    @Override
+    public void reinitialise() {
+        initialise();
     }
     
     private void initRectangles() {
@@ -103,10 +113,5 @@ public class SquareObstacle extends Obstacle{
         for(Rectangle r : listOfRectangles) {
             pane.getChildren().remove(r);
         }
-    }
-    
-    @Override
-    public void increaseDifficulty(int score) {
-        angle = angle + score * 0.3;
     }
 }

@@ -1,48 +1,49 @@
 package application;
-import java.io.Serializable;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-public class Game{
-    private  AnchorPane gamePane;
-    private  Scene gameScene;
-    private  Stage gameStage;
+public class Game implements Serializable {
     
-    private  PauseMenu pauseMenuManager;
-    private  CollideMenu collideMenuManager;
+    private transient AnchorPane gamePane;
+    private transient Scene gameScene;
+    private transient Stage gameStage;
+
+    private transient PauseMenu pauseMenuManager;
+    private transient CollideMenu collideMenuManager;
     
     private Ball ball;
     
@@ -50,9 +51,9 @@ public class Game{
     private List<ColorSwitch> listOfColorSwitchers;
     private List<Star> listOfStars;
     
-    private  Label pointsLabel;
+    private transient Label pointsLabel;
     
-    private Random random;
+    private transient Random random;
     
     private int currentScore;
     
@@ -60,87 +61,164 @@ public class Game{
     private double currentVelocityY;
     private double gravity;
     
-    private  Timeline ballTimeline;
+    private transient Timeline ballTimeline;
     
     private boolean firstSpace;
     private Obstacle topmost;
 
     public Game() {
     	initStage();
+        initInGameMenus();
+        initRandom();
+        initPointsLabel();
     	initConstants();
-    	initGameElements();
-        createBackground();
-        createKeyListener();
+        initBackground();
         setupBallTimeline();
-        
-        ballTimeline.play();
+        createKeyListener();
+        initGameElements();
     }
-    
-    private void initConstants() {
-    	pauseMenuManager = new PauseMenu(this);
-    	collideMenuManager = new CollideMenu(this);
-    	currentScore = 0;
-    	gravity = 0d;
-    	firstSpace = false;
-    	random = new Random();
-    	listOfObstacles = new ArrayList<>();
-    	listOfColorSwitchers = new ArrayList<>();
-    	listOfStars = new ArrayList<>();
-    	pointsLabel = new Label("# 00");
-    }
-    
+
     private void initStage() {
-        this.gamePane = new AnchorPane();
-        this.gameScene = new Scene(gamePane, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
+        gamePane = new AnchorPane();
+        gameScene = new Scene(gamePane, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         gameStage = new Stage();
         gameStage.setScene(gameScene);
     }
+
+    private void initInGameMenus() {
+        pauseMenuManager = new PauseMenu(this);
+        collideMenuManager = new CollideMenu(this);
+    }
+
+    private void initRandom() {
+        random = new Random();
+    }
+    
+    private void initPointsLabel() {
+        pointsLabel = new Label("* 00");
+        pointsLabel.setLayoutX(10);
+        pointsLabel.setLayoutY(10);
+        pointsLabel.setFont(Font.font("arial", FontWeight.BOLD, 50));
+        pointsLabel.setTextFill(Color.AZURE);
+        gamePane.getChildren().add(pointsLabel);
+    }
+
+    private void initConstants() {
+    	currentScore = 0;
+    	gravity = 0d;
+    	firstSpace = false;
+    	listOfObstacles = new ArrayList<>();
+    	listOfColorSwitchers = new ArrayList<>();
+    	listOfStars = new ArrayList<>();
+    }
+    
+    private void initBackground() {
+        Image backgroundImage = new Image(Constants.MAIN_MENU_BACKGROUND_PATH, 256, 256, false, true);
+        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+        gamePane.setBackground(new Background(background));
+    }
+
     
     private void initGameElements() {
     	ball = new Ball(gamePane);
-    	
     	currentPositionY = ball.getPositionY();
     	currentVelocityY = ball.getVelocityY();
-    	
-    	pointsLabel.setLayoutX(10);
-    	pointsLabel.setLayoutY(10);
-    	pointsLabel.setFont(Font.font("arial", FontWeight.BOLD, 50));
-    	pointsLabel.setTextFill(Color.AZURE);
-    	gamePane.getChildren().add(pointsLabel);
-    	
-    	// generate initial obstacles, stars and color switchers
-    	topmost = generateObstacleRandomly(Constants.GAME_HEIGHT/2);
-    	double current = topmost.getPositionY();
-    	listOfObstacles.add(topmost);
-    	listOfColorSwitchers.add(new ColorSwitch(current  - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
-    	listOfStars.add(new Star(current));
-    	while(topmost.getPositionY() > 0) {
-    		current = current - Constants.DISTANCE_BETWEEN_OBSTACLES;
-    		topmost = generateObstacleRandomly(current);
-    		listOfObstacles.add(topmost);
-    		listOfColorSwitchers.add(new ColorSwitch(current  - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
-    		listOfStars.add(new Star(current));
-    	}
-    	
-    	// add game elements to the pane
-    	for(Obstacle o : listOfObstacles) {
-    		o.addElementsToGamePane(gamePane);
-    	}
-    	for(ColorSwitch c : listOfColorSwitchers) {
-    		c.addElementsToGamePane(gamePane);
-    	}
-    	for(Star s : listOfStars) {
-    		s.addElementsToGamePane(gamePane);
-    	}
+    	generateInitialObstaclesAndCollectables();
+        ballTimeline.play();
     }
+
+    private void generateInitialObstaclesAndCollectables() {
+        // generate initial obstacles, stars and color switchers
+        topmost = generateObstacleRandomly(Constants.GAME_HEIGHT/2);
+        double current = topmost.getPositionY();
+        listOfObstacles.add(topmost);
+        listOfColorSwitchers.add(new ColorSwitch(current  - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+        listOfStars.add(new Star(current));
+        while(topmost.getPositionY() > 0) {
+            current = current - Constants.DISTANCE_BETWEEN_OBSTACLES;
+            topmost = generateObstacleRandomly(current);
+            listOfObstacles.add(topmost);
+            listOfColorSwitchers.add(new ColorSwitch(current  - Constants.DISTANCE_BETWEEN_OBSTACLES/2));
+            listOfStars.add(new Star(current));
+        }
+        addElementsToGamePane();
+    }
+
+    private void addElementsToGamePane() {
+        // add game elements to the pane
+        // XXX add a NULL POINTER EXCEPTION HERE
+        for(Obstacle o : listOfObstacles) {
+            o.addElementsToGamePane(gamePane);
+        }
+        for(ColorSwitch c : listOfColorSwitchers) {
+            c.addElementsToGamePane(gamePane);
+        }
+        for(Star s : listOfStars) {
+            s.addElementsToGamePane(gamePane);
+        }
+    }
+
+    private void setupBallTimeline() {
+        KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new BallTimeHandler());
+        ballTimeline = new Timeline(kf);
+        ballTimeline.setCycleCount(Animation.INDEFINITE);
+    }
+
+    private void createKeyListener() {
+        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if( keyEvent.getCode() == KeyCode.SPACE) {
+                    System.out.println("Space bar pressed");
+                    if(firstSpace == false) {
+                        firstSpace = true;
+                        gravity = Constants.GRAVITY;
+                    }
+                    currentVelocityY = -20;
+                }
+                
+                if(keyEvent.getCode() == KeyCode.P) {
+                    System.out.println("P key pressed");
+                    // XXX null pointer exception. ballTimeline and pauseMenuManager may not be init
+                    ballTimeline.pause();
+                    pauseMenuManager.showPauseMenu();
+                }
+            }
+        });
+    }
+
+    // ---
+
+    private double calculateDistance(double y1, double y2) {
+        return Math.abs(y1 - y2);
+        
+    }
+
+    public void createNewGame() {
+        // this method can be called by PAUSE MENU || COLLISION MENU || DESERIALISE
+        // XXX null pointer exception for gameStage
+        gameStage.initModality(Modality.APPLICATION_MODAL);
+        gameStage.setTitle("Color Switch");
+        gameStage.show();
+        ballTimeline.play();
+    }
+    
+    public void startGame() {
+        // xxx null pointer excepion
+        gameStage.show();
+        ballTimeline.play();
+    }
+
+    // --- 
+
     
     private Obstacle generateObstacleRandomly(double y) {
     	if(currentScore < 2) {
     	    return new CircleObstacle(y);
     	} else if(currentScore < 4) {
     	    return new SquareObstacle(y);
-    	//} else if(currentScore < 6) {
-    	  //  return new DoubleCircleObstacle(y);
+    	} else if(currentScore < 6) {
+    	    return new DoubleCircleObstacle(y);
     	} else if(currentScore < 8) {
     	    return new ConcentricCircleObstacle(y);
     	} else {
@@ -149,8 +227,8 @@ public class Game{
     	        return new CircleObstacle(y);
     	    } else if (n == 1) {
     	        return new SquareObstacle(y);
-    	   // } else if (n == 2) {
-    	     //   return new DoubleCircleObstacle(y);
+    	    } else if (n == 2) {
+    	        return new DoubleCircleObstacle(y);
     	    } else if (n == 3) {
     	        return new ConcentricCircleObstacle(y);
     	    } else {
@@ -161,11 +239,7 @@ public class Game{
     	}
     }
 
-    private void setupBallTimeline() {
-    	KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new BallTimeHandler());
-    	ballTimeline = new Timeline(kf);
-    	ballTimeline.setCycleCount(Animation.INDEFINITE);
-    }
+
 
     private class BallTimeHandler implements EventHandler<ActionEvent> {
     	public void handle(ActionEvent event) {
@@ -198,7 +272,6 @@ public class Game{
     		generateNewObstacleAndCollectables();
     		// remove old obstacles and collectables( there wont be any collectables since we consume them)
     		removeOffScreenObstacles();
-    		increaseDifficulty();
     	}
     }
     
@@ -238,12 +311,12 @@ public class Game{
     		for(Shape current : obstacle.getElements()) {
     			Shape intersect = Shape.intersect(block, current);
     			if(intersect.getBoundsInLocal().getWidth() != -1) {
-    			    if(current instanceof Arc && block.getFill().equals(current.getStroke())) {
-    			        // this is ulta logic . reverse it later XXX
+    			    if(current instanceof Arc && !(block.getFill().equals(current.getStroke()))) {
+    			        
     			        collisionDetected = true;
     			        break;
-    			    } else if(current instanceof Rectangle && block.getFill().equals(current.getFill())) {
-    			        // this is ulta logic, reverse XXX
+    			    } else if(current instanceof Rectangle && !(block.getFill().equals(current.getFill()))) {
+    			        
     			        collisionDetected = true;
     			        break;
     			    }
@@ -290,10 +363,7 @@ public class Game{
     	}
     }
     
-    private double calculateDistance(double y1, double y2) {
-    	return Math.abs(y1 - y2);
-    	
-    }
+
     
 
     private void checkForRevival() {
@@ -329,7 +399,7 @@ public class Game{
     }
     
     private void updateScoreLabel() {
-    	String text = "# ";
+    	String text = "* ";
 		if(currentScore < 10) {
 			text = text + "0";
 		}
@@ -386,42 +456,7 @@ public class Game{
     	    }
     	}
     }
-    
-    private void increaseDifficulty() {
-       for(Obstacle o : listOfObstacles) {
-           o.increaseDifficulty((int)currentScore);
-       }
-    }
 
-    public void createNewGame() {
-        //this.menuStage = menuStage;
-        gameStage.initModality(Modality.APPLICATION_MODAL);
-        gameStage.setTitle("Color Switch");
-        gameStage.show();
-    }
-
-    private void createKeyListener() {
-        gameScene.setOnKeyPressed(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent keyEvent) {
-                if( keyEvent.getCode() == KeyCode.SPACE) {
-                    System.out.println("Space bar pressed");
-                    if(firstSpace == false) {
-                    	firstSpace = true;
-                    	gravity = Constants.GRAVITY;
-                    }
-                    currentVelocityY = -20;
-                }
-                
-                if(keyEvent.getCode() == KeyCode.P) {
-                	ballTimeline.pause();
-                	gamePane.setFocusTraversable(false);
-                	pauseMenuManager.showPauseMenu();
-                	
-                }
-            }
-        });
-    }
     
     public void resumeGame() {
     	firstSpace = false;
@@ -429,16 +464,82 @@ public class Game{
     	gravity = 0;
     	ballTimeline.play();
     }
-    
 
-    private void createBackground() {
-        Image backgroundImage = new Image("resources/deep_blue.png", 256, 256, false, true);
-        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
-        gamePane.setBackground(new Background(background));
-    }
     
     public void closeStage() {
     	gameStage.close();
+    }
+    
+    public void serialize() {
+        try {
+            Timestamp time = new Timestamp(System.currentTimeMillis());
+            String fileName = Constants.FILE_START_STRING + time.getTime() + ".ser";
+            ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(fileName));
+            os.writeObject(ball);
+            os.writeObject(listOfColorSwitchers);
+            os.writeObject(listOfStars);
+            os.writeObject(listOfObstacles);
+            os.writeObject(currentScore);
+            os.writeObject(currentPositionY);
+            os.writeObject(currentVelocityY);
+            os.writeObject(topmost);
+        } catch(IOException e) {
+            System.out.println("serialize()");
+            e.printStackTrace();
+        }
+        ball = null;
+        listOfColorSwitchers = null;
+        listOfStars = null;
+        listOfObstacles = null;
+        topmost = null;
+        ballTimeline = null;
+    }
+    
+    public void deserialise(String fileName) {
+        try {
+            // read values from file
+            ObjectInputStream is = new ObjectInputStream(new FileInputStream(fileName));
+            ball = (Ball) is.readObject();
+            listOfColorSwitchers = (ArrayList<ColorSwitch>) is.readObject();
+            listOfStars = (ArrayList<Star>) is.readObject();
+            listOfObstacles = (ArrayList<Obstacle>) is.readObject();
+            currentScore = (Integer) is.readObject();
+            currentPositionY = (Double) is.readObject();
+            currentVelocityY = (Double) is.readObject();
+            topmost = (Obstacle) is.readObject();
+            // re initialise all the transient variables.
+            // since they have been init to null
+            initStage();
+            initInGameMenus();
+            initRandom();
+            initPointsLabel();
+            initBackground();
+            createKeyListener();
+            ball.reinitialise(gamePane);
+            reinitialiseObstaclesAndCollectables(); // XXX
+            updateScoreLabel(); 
+            gameStage.show();
+            setupBallTimeline(); // XXX 
+            resumeGame();
+            ballTimeline.play();
+            
+        } catch(Exception e) {
+            System.out.println("deserialise()");
+            e.printStackTrace();
+        }
+    }
+    
+    private void reinitialiseObstaclesAndCollectables() {
+        for(Obstacle o : listOfObstacles) {
+            o.reinitialise();
+        }
+        for(ColorSwitch c : listOfColorSwitchers) {
+            c.reinitialise();
+        }
+        for(Star s : listOfStars) {
+            s.reinitialise();
+        }
+        addElementsToGamePane();
     }
 }
 

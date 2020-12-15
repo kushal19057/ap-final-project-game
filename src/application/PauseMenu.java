@@ -78,7 +78,7 @@ public class PauseMenu {
 		saveAndBackToMainMenuButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent actionEvent){
-				pauseMenuPane.setFocusTraversable(false);
+			    gameManager.serialize();
 				pauseMenuStage.close();
 				gameManager.closeStage();
 			}
@@ -121,7 +121,6 @@ public class PauseMenu {
 
     
     public void showPauseMenu() {
-    	pauseMenuPane.setFocusTraversable(true);
     	pauseMenuStage.show();
     }
  }

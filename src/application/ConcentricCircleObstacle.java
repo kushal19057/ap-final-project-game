@@ -1,5 +1,6 @@
 package application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,11 +11,11 @@ import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
-public class ConcentricCircleObstacle extends Obstacle {
-    private List<Arc> listOfInnerArcs;
-    private List<Arc> listOfOuterArcs;
-    private List<Rotate> listOfInnerRotate;
-    private List<Rotate> listOfOuterRotate;
+public class ConcentricCircleObstacle extends Obstacle implements Serializable {
+    private transient List<Arc> listOfInnerArcs;
+    private transient List<Arc> listOfOuterArcs;
+    private transient List<Rotate> listOfInnerRotate;
+    private transient List<Rotate> listOfOuterRotate;
     
     private static final double INNER_ARC_RADIUS = 150d;
     private static final double OUTER_ARC_RADIUS = 175;
@@ -22,13 +23,22 @@ public class ConcentricCircleObstacle extends Obstacle {
     public static final double STROKE_WIDTH = 20;
 
     public ConcentricCircleObstacle(double y) {
-        super(Constants.GAME_WIDTH/2, y);
+        super(Constants.GAME_WIDTH/2, y);   
+        initialise();
+    }
+    
+    private void initialise() {
         listOfInnerArcs = new ArrayList<>();
         listOfOuterArcs = new ArrayList<>();
         listOfInnerRotate = new ArrayList<>();
         listOfOuterRotate = new ArrayList<>();
         initArcs();
-        initRotate();        
+        initRotate();
+    }
+    
+    @Override
+    public void reinitialise() {
+        initialise();
     }
     
     private void initArcs() {

@@ -12,9 +12,11 @@ import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -41,6 +43,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +55,7 @@ public class MainMenu extends Application {
     private Stage mainMenuStage;
     private Scene mainMenuScene;
     private AnchorPane mainMenuPane;
-
     private Game gameManager;
-    private VBox loadGamePane;
 
     private List<ColorSwitchButton> menuButtons;
     
@@ -79,6 +81,7 @@ public class MainMenu extends Application {
     private ParallelTransition parallelTransitionDown = new ParallelTransition();
     private ParallelTransition parallelTransitionUp = new ParallelTransition();
     
+    private static MediaPlayer mediaPlayer;
     public static void main(String[] args) {
         launch(args);
     }
@@ -88,6 +91,8 @@ public class MainMenu extends Application {
         try {
             mainMenuStage = primaryStage;
             initMainMenu();
+            addMusic();
+            gameManager = new Game();
             primaryStage.show();
         } catch(Exception e) {
             e.printStackTrace();
@@ -95,15 +100,29 @@ public class MainMenu extends Application {
     }
 
     private void initMainMenu() {
-        mainMenuPane = new AnchorPane();
-        mainMenuScene = new Scene(mainMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
-        mainMenuStage.setTitle("Main Menu");
-        mainMenuStage.setScene(mainMenuScene);
-        menuButtons = new ArrayList<>();
-        createButtons();
-        createBackground();
-        createLogo();
-        createAnimation();
+
+            mainMenuPane = new AnchorPane();
+            mainMenuScene = new Scene(mainMenuPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT);
+            mainMenuStage.setTitle("Main Menu");
+            mainMenuStage.setScene(mainMenuScene);
+            menuButtons = new ArrayList<>();
+            createButtons();
+            createBackground();
+            createLogo();
+            createAnimation();
+    }
+    
+    public void addMusic() {
+//        try {
+//            Media sound = new Media(getClass().getResource("/resources/background_music.mp3").toString());
+//            mediaPlayer = new MediaPlayer(sound);
+//            mediaPlayer.setAutoPlay(true);
+//            mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
+//            mediaPlayer.setStartTime(Duration.seconds(0));
+//            mediaPlayer.setStopTime(Duration.seconds(50));
+//            mediaPlayer.play();
+//        } catch(Exception e) {
+//        }
     }
     
     private void createAnimation() {
@@ -213,8 +232,6 @@ public class MainMenu extends Application {
             rotate.setPivotY(350);
             rotate.setAngle(2.5);
         }
-        // XXX pause this. this causes preformance drop in game.
-        // XXX or remove the game stage in total
         KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new TimeHandler());
         Timeline timeline = new Timeline(kf);
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -247,7 +264,7 @@ public class MainMenu extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 gameManager = new Game();
-                gameManager.createNewGame();
+                gameManager.startGame();
             }
         });
     }
@@ -259,16 +276,36 @@ public class MainMenu extends Application {
         loadGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
-                loadGamePane = new VBox();
-                Button button = new Button("Back to main menu");
-                loadGamePane.getChildren().add(button);
-                button.setOnAction(new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent actionEvent) {
+                VBox layout = new VBox(10);
+                layout.setPadding(new Insets(20, 20, 20, 20));
+                DataBaseGame savedGames = new DataBaseGame();
+                List<String> listOfGames= savedGames.updateFiles();
+                ListView<String> listView = new ListView<>();
+                listView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                for(String current : listOfGames) {
+                    listView.getItems().add(current);
+                }
+                Button button = new Button("Load Game");
+                Button menuButton = new Button("Back to main menu");
+                button.setOnAction(e -> {
+                    String game = null;
+                    ObservableList<String> selectedGames;
+                    selectedGames = listView.getSelectionModel().getSelectedItems();
+                    
+                    for(String m : selectedGames) {
+                        game = m;
+                    }
+                    
+                    if(game != null) {
                         mainMenuScene.setRoot(mainMenuPane);
+                        gameManager.deserialise(game);
                     }
                 });
-                mainMenuScene.setRoot(loadGamePane);
+                menuButton.setOnAction(e -> {
+                    mainMenuScene.setRoot(mainMenuPane);
+                });
+                layout.getChildren().addAll(listView, button, menuButton);
+                mainMenuScene.setRoot(layout);
             }
         });
     }

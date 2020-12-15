@@ -1,26 +1,33 @@
 package application;
 
+import java.io.Serializable;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
-public class Ball extends Actor{
+public class Ball extends Actor implements Serializable {
 	private int color;
 	private double velocityY;
-	private  Circle circle;
-	private  AnchorPane gamePane;
+	private transient Circle circle;
 	
 	public Ball(AnchorPane pane) {
 		super(Constants.GAME_WIDTH/2, Constants.GAME_HEIGHT - Constants.START_DELTA_BALL);
-		color = 0;
-		circle = new Circle();
-		velocityY = 0;
-		circle.setCenterX(currentPositionX);
-		circle.setCenterY(currentPositionY);
-		circle.setRadius(Constants.BALL_RADIUS);
-		circle.setFill(Constants.map.get(color));
-		// add this to the pane
-		gamePane = pane;
-		gamePane.getChildren().add(circle);
+		initialise(pane);
+	}
+	
+	private void initialise(AnchorPane pane) {
+	    color = 0;
+	    velocityY = 0;
+	    reinitialise(pane);
+	}
+	
+	public void reinitialise(AnchorPane pane) {
+	    circle = new Circle();
+	    circle.setCenterX(currentPositionX);
+	    circle.setCenterY(currentPositionY);
+	    circle.setRadius(Constants.BALL_RADIUS);
+	    circle.setFill(Constants.map.get(color));
+	    pane.getChildren().add(circle);
 	}
 
 	public double getVelocityY() {

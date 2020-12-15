@@ -11,8 +11,9 @@ import javafx.scene.text.FontWeight;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 
-public class ColorSwitchButton extends Button {
+public class ColorSwitchButton extends Button implements Serializable {
     public ColorSwitchButton(String text) {
         setText(text);
         setButtonFont();

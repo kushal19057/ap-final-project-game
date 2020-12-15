@@ -12,9 +12,9 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import java.io.Serializable;
 
-public class CircleObstacle extends Obstacle {
-	private  List<Arc> listOfArcs;
-	private  List<Rotate> listOfRotate;
+public class CircleObstacle extends Obstacle implements Serializable {
+	private transient List<Arc> listOfArcs;
+	private  transient List<Rotate> listOfRotate;
 
 	private static final double ARC_RADIUS = 175d;
 	private static final double ARC_LENGTH = 75d;
@@ -22,10 +22,14 @@ public class CircleObstacle extends Obstacle {
 	
 	public CircleObstacle(double y) {
 		super(Constants.GAME_WIDTH/2, y);
-		listOfArcs = new ArrayList<>();
-		listOfRotate = new ArrayList<>();
-		initArcs();
-		initRotate();
+		initCircleElements();
+	}
+	
+	private void initCircleElements() {
+	    listOfArcs = new ArrayList<>();
+        listOfRotate = new ArrayList<>();
+        initArcs();
+        initRotate();
 	}
 	
 	private void initArcs() {
@@ -48,9 +52,13 @@ public class CircleObstacle extends Obstacle {
 			rotate.setAngle(angle);
 		}
 	}
+
+	// XXX add a null pointer exception in all of these
 	
-	// add an option to increase speed of rotation
-	
+	@Override
+	public void reinitialise() {
+	    initCircleElements();
+	}
 	@Override
 	public void rotate() {
 		for(int i=0;i<4;i++) {

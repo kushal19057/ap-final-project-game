@@ -1,5 +1,6 @@
 package application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +17,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class CollideMenu {
+public class CollideMenu implements Serializable {
     private Game gameManager;
-    private Stage collideMenuStage;
-    private Scene collideMenuScene;
-    private AnchorPane collideMenuPane;
+    private transient Stage collideMenuStage;
+    private transient Scene collideMenuScene;
+    private transient AnchorPane collideMenuPane;
     
-    private List<ColorSwitchButton> collideMenuButtons;
-    private ColorSwitchButton reviveButton;
-    private ColorSwitchButton restartButton;
-    private ColorSwitchButton mainMenuButton;
-    private ColorSwitchButton exitButton;
+    private transient List<ColorSwitchButton> collideMenuButtons;
+    private transient ColorSwitchButton reviveButton;
+    private transient ColorSwitchButton restartButton;
+    private transient ColorSwitchButton mainMenuButton;
+    private transient ColorSwitchButton exitButton;
     
     public CollideMenu(Game gameManager) {
         this.gameManager = gameManager;
