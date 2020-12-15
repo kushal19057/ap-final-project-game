@@ -218,7 +218,7 @@ public class Game implements Serializable {
     	} else if(currentScore < 4) {
     	    return new SquareObstacle(y);
     	} else if(currentScore < 6) {
-    	    return new DoubleCircleObstacle(y);
+    	    return new TripleConcentricCircleObstacle(y);
     	} else if(currentScore < 8) {
     	    return new ConcentricCircleObstacle(y);
     	} else {
@@ -228,7 +228,7 @@ public class Game implements Serializable {
     	    } else if (n == 1) {
     	        return new SquareObstacle(y);
     	    } else if (n == 2) {
-    	        return new DoubleCircleObstacle(y);
+    	        return new TripleConcentricCircleObstacle(y);
     	    } else if (n == 3) {
     	        return new ConcentricCircleObstacle(y);
     	    } else {

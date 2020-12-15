@@ -59,7 +59,7 @@ public class TripleConcentricCircleObstacle extends Obstacle implements Serializ
         for(int i=0;i<4;i++) 
         {
             Arc arc = new Arc(currentPositionX, currentPositionY, MIDDLE_ARC_RADIUS, MIDDLE_ARC_RADIUS, i *90, ARC_LENGTH);
-            listOfInnerArcs.add(arc);
+            listOfMiddleArcs.add(arc);
             arc.setFill(Color.TRANSPARENT);
             arc.setStroke(Constants.map.get(i));
             arc.setStrokeWidth(STROKE_WIDTH);
@@ -83,7 +83,7 @@ public class TripleConcentricCircleObstacle extends Obstacle implements Serializ
             listOfInnerRotate.add(rotate);
             rotate.setPivotX(currentPositionX);
             rotate.setPivotY(currentPositionY);
-            rotate.setAngle(2*angle);
+            rotate.setAngle(1.2*angle);
         }
         for(int i=0;i<4;i++)                         //rotation for the middle circle
          {
@@ -91,7 +91,7 @@ public class TripleConcentricCircleObstacle extends Obstacle implements Serializ
             listOfMiddleRotate.add(rotate);
             rotate.setPivotX(currentPositionX);
             rotate.setPivotY(currentPositionY);
-            rotate.setAngle(2*angle);
+            rotate.setAngle(1.2*angle);
         }
         for(int i=0;i<4;i++)                         // rotation for the outer circle
          {
@@ -99,7 +99,7 @@ public class TripleConcentricCircleObstacle extends Obstacle implements Serializ
             listOfOuterRotate.add(rotate);
             rotate.setPivotX(currentPositionX);
             rotate.setPivotY(currentPositionY);
-            rotate.setAngle(angle);
+            rotate.setAngle(1.2*angle);
         }
     }
 
@@ -124,7 +124,7 @@ public class TripleConcentricCircleObstacle extends Obstacle implements Serializ
         for(int i=0;i<4;i++)
          {
             listOfInnerArcs.get(i).getTransforms().add(listOfInnerRotate.get(i));
-            listOfMiddleArcs.get(i).getTransforms().add(listOfInnerRotate.get(i));
+            listOfMiddleArcs.get(i).getTransforms().add(listOfMiddleRotate.get(i));
             listOfOuterArcs.get(i).getTransforms().add(listOfOuterRotate.get(i));
         }
 
