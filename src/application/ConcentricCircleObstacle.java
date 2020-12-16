@@ -12,6 +12,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 public class ConcentricCircleObstacle extends Obstacle implements Serializable {
+	private static final long serialVersionUID = 1L;
     private transient List<Arc> listOfInnerArcs;
     private transient List<Arc> listOfOuterArcs;
     private transient List<Rotate> listOfInnerRotate;
@@ -135,5 +136,4 @@ public class ConcentricCircleObstacle extends Obstacle implements Serializable {
             r.setPivotY(currentPositionY);
         }
     }
-
 }

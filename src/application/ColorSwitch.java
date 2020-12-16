@@ -1,18 +1,17 @@
 package application;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.shape.Shape;
-import javafx.scene.transform.Rotate;
 
 public class ColorSwitch extends Actor implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private transient List<Arc> listOfArcs;
 	private static final int ARC_LENGTH = 80;
 	private static final int ARC_RADIUS = 30;

@@ -11,6 +11,7 @@ import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 public class TripleConcentricCircleObstacle extends Obstacle implements Serializable {
+	private static final long serialVersionUID = 1L;
     private List<Arc> listOfInnerArcs;
     private List<Arc> listOfMiddleArcs;
     private List<Arc> listOfOuterArcs;

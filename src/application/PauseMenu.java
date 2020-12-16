@@ -1,11 +1,12 @@
 package application;
 
-import javafx.animation.Timeline;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
@@ -14,9 +15,6 @@ import javafx.scene.layout.BackgroundRepeat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import java.util.List;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class PauseMenu {
 	private Game gameManager;

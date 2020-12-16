@@ -1,6 +1,5 @@
 package application;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class CollideMenu implements Serializable {
+public class CollideMenu{
     private Game gameManager;
     private transient Stage collideMenuStage;
     private transient Scene collideMenuScene;

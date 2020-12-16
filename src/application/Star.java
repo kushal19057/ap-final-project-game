@@ -5,6 +5,7 @@ import javafx.scene.layout.AnchorPane;
 import java.io.Serializable;
 
 public class Star extends Actor implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private transient ImageView starImage;
 	
 	public Star(double x, double y) {

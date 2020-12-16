@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import javafx.animation.*;
-import javafx.event.ActionEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
@@ -37,7 +36,7 @@ public class MainMenuAnimation {
     private ParallelTransition parallelTransitionDown = new ParallelTransition();
     private ParallelTransition parallelTransitionUp = new ParallelTransition();
     
-    private int NUMBER_OF_SNOWBALLS = 2000;
+    private int NUMBER_OF_SNOWBALLS = 1000;
     private Circle snowballs[] = new Circle[NUMBER_OF_SNOWBALLS];
     
     public MainMenuAnimation(AnchorPane mainMenuPane) {
@@ -178,8 +177,13 @@ public class MainMenuAnimation {
     		Circle current = snowballs[i];
     		double y = current.getCenterY();
     		double x = current.getCenterX();
-    		y = y + 1;
-    		x += (double)(random.nextInt(3) -1);
+    		y += 0.5;
+    		boolean left = random.nextBoolean();
+    		if(left) {
+    			x -= 0.2;
+    		} else {
+    			x += 0.2;
+    		}
     		if(y > Constants.MENU_HEIGHT) {
     			y = 0;
     		}

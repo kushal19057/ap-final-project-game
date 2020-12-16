@@ -1,19 +1,17 @@
 package application;
 
+import java.io.Serializable;
+
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-
 public class ColorSwitchButton extends Button implements Serializable {
+	private static final long serialVersionUID = 1L;
     public ColorSwitchButton(String text) {
         setText(text);
         setButtonFont();

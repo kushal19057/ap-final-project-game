@@ -1,13 +1,12 @@
 package application;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.animation.Animation;
-import javafx.animation.FadeTransition;
 import javafx.animation.KeyFrame;
-import javafx.animation.ParallelTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
-import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,36 +18,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import javafx.scene.layout.*;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.transform.Rotate;
-
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URISyntaxException;
-import java.util.Date;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class MainMenu extends Application {
@@ -130,6 +110,7 @@ public class MainMenu extends Application {
     private void createButtons() {
         createStartButton();
         createLoadGameButton();
+        createHelpButton();
         createExitButton();
     }
 
@@ -145,7 +126,19 @@ public class MainMenu extends Application {
             }
         });
     }
-
+    
+    private void createHelpButton() {
+    	ColorSwitchButton helpButton = new ColorSwitchButton("HELP");
+    	addMenuButton(helpButton);
+    	
+    	helpButton.setOnAction(new EventHandler<ActionEvent>() {
+    		@Override
+    		public void handle(ActionEvent actionEvent) {
+    			System.out.println("Help menu");
+    		}
+    	});
+    }
+    
     private void createLoadGameButton() {
         ColorSwitchButton loadGameButton = new ColorSwitchButton("LOAD GAME");
         addMenuButton(loadGameButton);

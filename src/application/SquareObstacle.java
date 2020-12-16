@@ -6,12 +6,12 @@ import java.util.List;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Arc;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
 public class SquareObstacle extends Obstacle implements Serializable {
+	private static final long serialVersionUID = 1L;
     private transient List<Rectangle> listOfRectangles;
     private transient List<Rotate> listOfRotates;
     public static final double LENGTH = 300;

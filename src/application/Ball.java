@@ -6,6 +6,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Circle;
 
 public class Ball extends Actor implements Serializable {
+	private static final long serialVersionUID = 1L;
 	private int color;
 	private double velocityY;
 	private transient Circle circle;

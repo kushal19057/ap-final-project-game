@@ -4,7 +4,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,8 +35,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Game implements Serializable {
-    
+public class Game{
     private transient AnchorPane gamePane;
     private transient Scene gameScene;
     private transient Stage gameStage;
@@ -53,8 +51,6 @@ public class Game implements Serializable {
     
     private transient Label pointsLabel;
     
-    private transient Random random;
-    
     private int currentScore;
     
     private double currentPositionY;
@@ -69,7 +65,6 @@ public class Game implements Serializable {
     public Game() {
     	initStage();
         initInGameMenus();
-        initRandom();
         initPointsLabel();
     	initConstants();
         initBackground();
@@ -90,10 +85,6 @@ public class Game implements Serializable {
         collideMenuManager = new CollideMenu(this);
     }
 
-    private void initRandom() {
-        random = new Random();
-    }
-    
     private void initPointsLabel() {
         pointsLabel = new Label("* 00");
         pointsLabel.setLayoutX(10);
@@ -113,9 +104,13 @@ public class Game implements Serializable {
     }
     
     private void initBackground() {
-        Image backgroundImage = new Image(Constants.MAIN_MENU_BACKGROUND_PATH, 256, 256, false, true);
-        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
-        gamePane.setBackground(new Background(background));
+    	try {
+    		Image backgroundImage = new Image(Constants.MAIN_MENU_BACKGROUND_PATH, 256, 256, false, true);
+    		BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+    		gamePane.setBackground(new Background(background));
+    	} catch(Exception e) {
+    		System.err.println("Exception - Game.java : initBackground()");
+    	}
     }
 
     
@@ -124,7 +119,11 @@ public class Game implements Serializable {
     	currentPositionY = ball.getPositionY();
     	currentVelocityY = ball.getVelocityY();
     	generateInitialObstaclesAndCollectables();
-        ballTimeline.play();
+    	try {
+    		ballTimeline.play();
+    	} catch(NullPointerException e) {
+    		System.err.println("NullPointerException - Game.java : initGameElements()");
+    	}
     }
 
     private void generateInitialObstaclesAndCollectables() {
@@ -145,17 +144,19 @@ public class Game implements Serializable {
     }
 
     private void addElementsToGamePane() {
-        // add game elements to the pane
-        // XXX add a NULL POINTER EXCEPTION HERE
-        for(Obstacle o : listOfObstacles) {
-            o.addElementsToGamePane(gamePane);
-        }
-        for(ColorSwitch c : listOfColorSwitchers) {
-            c.addElementsToGamePane(gamePane);
-        }
-        for(Star s : listOfStars) {
-            s.addElementsToGamePane(gamePane);
-        }
+    	try {
+    		for(Obstacle o : listOfObstacles) {
+    			o.addElementsToGamePane(gamePane);
+    		}
+    		for(ColorSwitch c : listOfColorSwitchers) {
+    			c.addElementsToGamePane(gamePane);
+    		}
+    		for(Star s : listOfStars) {
+    			s.addElementsToGamePane(gamePane);
+    		}
+    	} catch(NullPointerException e) {
+    		System.err.println("Game.java: addElementsToGamePane()");
+    	}
     }
 
     private void setupBallTimeline() {
@@ -187,30 +188,38 @@ public class Game implements Serializable {
         });
     }
 
-    // ---
-
+    /*
+     * return the distance b/w 2 y coordinates
+     * 
+     * @param 	y1		position of entity 1
+     * @param 	y2		position of entity 2
+     * @return 			double value >= 0
+     */
     private double calculateDistance(double y1, double y2) {
         return Math.abs(y1 - y2);
-        
     }
 
     public void createNewGame() {
         // this method can be called by PAUSE MENU || COLLISION MENU || DESERIALISE
-        // XXX null pointer exception for gameStage
-        gameStage.initModality(Modality.APPLICATION_MODAL);
-        gameStage.setTitle("Color Switch");
-        gameStage.show();
-        ballTimeline.play();
+    	try {
+    		gameStage.initModality(Modality.APPLICATION_MODAL);
+    		gameStage.setTitle("Color Switch");
+    		gameStage.show();
+    		ballTimeline.play();
+    	} catch(NullPointerException e) {
+    		System.out.println("Game.java: createNewGame()");
+    	}
     }
     
     public void startGame() {
-        // xxx null pointer excepion
-        gameStage.show();
-        ballTimeline.play();
+    	try {
+    		gameStage.show();
+    		ballTimeline.play();
+    	} catch(NullPointerException e) {
+    		System.out.println("Game.java: startGame()");
+    	}
     }
 
-    // --- 
-    
     /*
      * generate an obstacle on the basis of currentScore
      * If currentScore < 2 * number_of_obstacles, generate sequentially
@@ -220,6 +229,7 @@ public class Game implements Serializable {
      * @return 		instance of Obstacle, never null
      */
     private Obstacle generateObstacleRandomly(double y) {
+    	Random random = new Random();
     	if(currentScore < 2 * Constants.NUMBER_OF_OBSTACLES) {
     		int n = currentScore / 4;
     	    return ObstacleFactory.createObstacle(n, y);
@@ -228,9 +238,7 @@ public class Game implements Serializable {
     	    return ObstacleFactory.createObstacle(n, y);
     	}
     }
-
-
-
+    
     private class BallTimeHandler implements EventHandler<ActionEvent> {
     	public void handle(ActionEvent event) {
     		for(Obstacle obstacle : listOfObstacles) {
@@ -265,12 +273,6 @@ public class Game implements Serializable {
     	}
     }
     
-    private void obstacleCollision() {
-        // XXX this is redundant
-        gameOver();
-    }
-    
-    
     private void gameOver() {
         currentPositionY -= 75;
         currentPositionY -= 80;
@@ -282,6 +284,10 @@ public class Game implements Serializable {
         
     }
     
+    /*
+     * lower the obstacles, stars, and colorSwitch by a given amount
+     * @param 	delta		>= 0 
+     */
     private void lowerObstaclesAndCollectables(double delta) {
     	for(Obstacle o : listOfObstacles) {
     		o.setPositionY(o.getPositionY() + delta);
@@ -313,7 +319,7 @@ public class Game implements Serializable {
     			}
     		}
     		if(collisionDetected) {
-    			obstacleCollision();
+    			gameOver();
     			break;
     		}
     	}
@@ -352,9 +358,6 @@ public class Game implements Serializable {
     		}
     	}
     }
-    
-
-    
 
     private void checkForRevival() {
     	if(currentScore > Constants.THRESHOLD_SCORE_REVIVAL) {
@@ -391,7 +394,7 @@ public class Game implements Serializable {
     private void updateScoreLabel() {
     	String text = "* ";
 		if(currentScore < 10) {
-			text = text + "0";
+			text += "0";
 		}
 		text = text + currentScore;
 		pointsLabel.setText(text);
@@ -417,7 +420,7 @@ public class Game implements Serializable {
     }
  
     private void removeOffScreenObstacles() {
-    	// remove the obstacle/collectable graphically and logically
+    	// remove game element graphically and logically
     	// obstacle
     	Iterator<Obstacle> iterobstacle = listOfObstacles.iterator();
     	while(iterobstacle.hasNext()) {
@@ -427,7 +430,7 @@ public class Game implements Serializable {
     			current.removeFromPane(gamePane);
     		}
     	}
-    	// remove offscreen stars
+    	// remove off-screen stars
     	Iterator<Star> iterStar = listOfStars.iterator();
     	while(iterStar.hasNext()) {
     	    Star current = iterStar.next();
@@ -436,7 +439,7 @@ public class Game implements Serializable {
     	        current.removeFromPane(gamePane);
     	    }
     	}
-    	// remove offscreen color switch
+    	// remove off-screen color switch
     	Iterator<ColorSwitch> iterSwitch = listOfColorSwitchers.iterator();
     	while(iterSwitch.hasNext()) {
     	    ColorSwitch current = iterSwitch.next();
@@ -473,6 +476,7 @@ public class Game implements Serializable {
             os.writeObject(currentPositionY);
             os.writeObject(currentVelocityY);
             os.writeObject(topmost);
+            os.close();
         } catch(IOException e) {
             System.out.println("serialize()");
             e.printStackTrace();
@@ -487,7 +491,6 @@ public class Game implements Serializable {
     
     public void deserialise(String fileName) {
         try {
-            // read values from file
             ObjectInputStream is = new ObjectInputStream(new FileInputStream(fileName));
             ball = (Ball) is.readObject();
             listOfColorSwitchers = (ArrayList<ColorSwitch>) is.readObject();
@@ -497,39 +500,40 @@ public class Game implements Serializable {
             currentPositionY = (Double) is.readObject();
             currentVelocityY = (Double) is.readObject();
             topmost = (Obstacle) is.readObject();
-            // re initialise all the transient variables.
-            // since they have been init to null
+            // initialize all the transient variables. 
             initStage();
             initInGameMenus();
-            initRandom();
             initPointsLabel();
             initBackground();
             createKeyListener();
             ball.reinitialise(gamePane);
-            reinitialiseObstaclesAndCollectables(); // XXX
+            reinitialiseObstaclesAndCollectables();
             updateScoreLabel(); 
             gameStage.show();
-            setupBallTimeline(); // XXX 
+            setupBallTimeline(); 
             resumeGame();
             ballTimeline.play();
-            
+            is.close();
         } catch(Exception e) {
-            System.out.println("deserialise()");
-            e.printStackTrace();
+            System.out.println("Game.java : deserialise()");
         }
     }
     
     private void reinitialiseObstaclesAndCollectables() {
-        for(Obstacle o : listOfObstacles) {
-            o.reinitialise();
-        }
-        for(ColorSwitch c : listOfColorSwitchers) {
-            c.reinitialise();
-        }
-        for(Star s : listOfStars) {
-            s.reinitialise();
-        }
-        addElementsToGamePane();
+    	try {
+    		for(Obstacle o : listOfObstacles) {
+    			o.reinitialise();
+    		}
+    		for(ColorSwitch c : listOfColorSwitchers) {
+    			c.reinitialise();
+    		}
+    		for(Star s : listOfStars) {
+    			s.reinitialise();
+    		}
+    		addElementsToGamePane();
+    	} catch(NullPointerException e) {
+    		System.out.println("NullPointerException - Game.java reinitialiseObstaclesAndCollectables()");
+    	}
     }
 }
 

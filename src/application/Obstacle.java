@@ -1,12 +1,13 @@
 package application;
 
+import java.io.Serializable;
 import java.util.List;
-import javafx.scene.Node;
+
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.Shape;
-import java.io.Serializable;
 
 public abstract class Obstacle extends Actor implements Serializable {
+	private static final long serialVersionUID = 1L;
     protected final double angle = 1.5;
 	public Obstacle(double x, double y) {
 		super(x, y);

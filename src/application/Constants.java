@@ -9,7 +9,7 @@ public final class Constants {
     public static final double MENU_HEIGHT = 800;
 
     public static final double MENU_BUTTONS_START_X = 180;
-    public static final double MENU_BUTTONS_START_Y = 600;
+    public static final double MENU_BUTTONS_START_Y = 550;
 
     public static final double GAME_WIDTH = 768;
     public static final double GAME_HEIGHT = 1024;
