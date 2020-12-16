@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.Serializable;
 
 import javafx.event.EventHandler;
@@ -7,6 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
@@ -43,6 +46,15 @@ public class ColorSwitchButton extends Button implements Serializable {
             public void handle(MouseEvent mouseEvent) {
                 if(mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                     setButtonPressedStyle();
+                }
+                // play music when button clicked
+                try {
+                	String file = "src/resources/click5.mp3";
+                	Media sound = new Media(new File(file).toURI().toString());
+                	MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                	mediaPlayer.play();
+                } catch(Exception e) {
+                	e.printStackTrace();
                 }
             }
         });
