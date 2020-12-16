@@ -36,5 +36,5 @@ gameplay.
 ![Gameplay](/screenshots/circle.PNG)
 ![Gameplay](/screenshots/concentric_circle.PNG)
 ![Gameplay](/screenshots/square.PNG)
-![Pause Menu](/screenshots/pause_menu.png)
+![Pause Menu](/screenshots/pause_menu.PNG)
 ## License
