@@ -138,7 +138,7 @@ public class MainMenu extends Application {
     	helpButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent actionEvent) {
-    			VBox layout = new VBox(10);
+    			VBox layout = new VBox(20);
     			try {
     				Image backgroundImage = new Image("resources/deep_blue.png");
     				BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
@@ -146,7 +146,7 @@ public class MainMenu extends Application {
     			} catch(Exception e) {
     				System.err.println("Exception - MainMenu.java : createHelpButton()");
     			}
-    			layout.setPadding(new Insets(20,20,20,20));
+    			layout.setPadding(new Insets(50,50,50,50));
     			ColorSwitchButton button = new ColorSwitchButton("Back to main menu");
     			Text text = new Text("HOW TO PLAY ?\n-> Use the \"SPACE_BAR\" to jump the ball\n"
     					+ "-> Use the key \"P\" to pause the game\n"

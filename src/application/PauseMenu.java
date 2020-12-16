@@ -112,7 +112,7 @@ public class PauseMenu {
     }
 	
     private void createBackground() {
-        Image backgroundImage = new Image("resources/backgroundCastles.png");
+        Image backgroundImage = new Image("resources/deep_blue.png");
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
         pauseMenuPane.setBackground(new Background(background));
     }
