@@ -27,6 +27,6 @@ The game is made using Java and JavaFX
 - Facade
 
 ## Screenshots from the game
-![Main Menu](screenshots/home_page.png)
+![](/screenshots/home_page.PNG)
 
 ## License
