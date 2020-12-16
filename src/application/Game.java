@@ -235,7 +235,7 @@ public class Game{
     private Obstacle generateObstacleRandomly(double y) {
     	Random random = new Random();
     	if(currentScore < 2 * Constants.NUMBER_OF_OBSTACLES) {
-    		int n = currentScore / 4;
+    		int n = currentScore % Constants.NUMBER_OF_OBSTACLES;
     	    return ObstacleFactory.createObstacle(n, y);
     	} else {
     	    int n = random.nextInt(Constants.NUMBER_OF_OBSTACLES);
