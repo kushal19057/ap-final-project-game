@@ -74,13 +74,14 @@ public class MainMenu extends Application {
     
     public void addMusic() {
         try {
-        	String path = "/home/kushal/eclipse-workspace/ap-final-project-game/src/resources/background_music.mp3"; 
-            Media sound = new Media(new File(path).toURI().toString());
+        	String musicFile = "src/resources/background_music.mp3";
+        	Media sound = new Media(new File(musicFile).toURI().toString());
             mediaPlayer = new MediaPlayer(sound);
             mediaPlayer.setAutoPlay(true);
             mediaPlayer.setCycleCount(MediaPlayer.INDEFINITE);
             mediaPlayer.play();
         } catch(Exception e) {
+        	e.printStackTrace();
         }
     }
     
