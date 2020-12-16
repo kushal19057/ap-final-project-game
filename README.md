@@ -32,7 +32,9 @@ gameplay.
 - Facade
 
 ## Screenshots from the game
-![Main Menu](/screenshots/home_page.PNG)
-![Gameplay](/screenshots/concentric_circle.PNG)
-
-## License
+![Main Menu](/screenshots/main-menu.png)
+![Help option](/screenshots/help.png)
+![gameplay](/screenshots/gameplay1.png)
+![gameplay](/screenshots/gameplay2.png)
+![load game](/screenshots/load.png)
+![pause menu](/screenshots/pause.png)
