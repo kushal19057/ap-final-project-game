@@ -114,7 +114,7 @@ public class CollideMenu{
     }
     
     private void createBackground() {
-        Image backgroundImage = new Image("resources/backgroundCastles.png");
+        Image backgroundImage = new Image("resources/deep_blue.png");
         BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
         collideMenuPane.setBackground(new Background(background));
     }

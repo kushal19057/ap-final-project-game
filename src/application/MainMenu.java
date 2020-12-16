@@ -27,6 +27,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -135,7 +138,28 @@ public class MainMenu extends Application {
     	helpButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent actionEvent) {
-    			System.out.println("Help menu");
+    			VBox layout = new VBox(20);
+    			try {
+    				Image backgroundImage = new Image("resources/deep_blue.png");
+    				BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+    				layout.setBackground(new Background(background));
+    			} catch(Exception e) {
+    				System.err.println("Exception - MainMenu.java : createHelpButton()");
+    			}
+    			layout.setPadding(new Insets(50,50,50,50));
+    			ColorSwitchButton button = new ColorSwitchButton("Back to main menu");
+    			Text text = new Text("HOW TO PLAY ?\n-> Use the \"SPACE_BAR\" to jump the ball\n"
+    					+ "-> Use the key \"P\" to pause the game\n"
+    					+ "-> Load a previously saved game using \"Load Game\" option\n"
+    					+ "-> Enjoy!");
+    			text.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+    			text.setFill(Color.AZURE);
+    			text.setWrappingWidth((Constants.MENU_WIDTH * 5)/6);
+    			button.setOnAction(e-> {
+    				mainMenuScene.setRoot(mainMenuPane);
+    			});
+    			layout.getChildren().addAll(text, button);
+    			mainMenuScene.setRoot(layout);
     		}
     	});
     }
@@ -148,6 +172,13 @@ public class MainMenu extends Application {
             @Override
             public void handle(ActionEvent actionEvent) {
                 VBox layout = new VBox(10);
+                try {
+    				Image backgroundImage = new Image("resources/deep_blue.png");
+    				BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+    				layout.setBackground(new Background(background));
+    			} catch(Exception e) {
+    				System.err.println("Exception - MainMenu.java : createHelpButton()");
+    			}
                 layout.setPadding(new Insets(20, 20, 20, 20));
                 DataBaseGame savedGames = new DataBaseGame();
                 List<String> listOfGames= savedGames.updateFiles();
@@ -156,8 +187,8 @@ public class MainMenu extends Application {
                 for(String current : listOfGames) {
                     listView.getItems().add(current);
                 }
-                Button button = new Button("Load Game");
-                Button menuButton = new Button("Back to main menu");
+                ColorSwitchButton button = new ColorSwitchButton("Load Game");
+                ColorSwitchButton menuButton = new ColorSwitchButton("Main Menu");
                 button.setOnAction(e -> {
                     String game = null;
                     ObservableList<String> selectedGames;

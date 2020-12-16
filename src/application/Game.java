@@ -80,6 +80,7 @@ public class Game{
         gamePane = new AnchorPane();
         gameScene = new Scene(gamePane, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         gameStage = new Stage();
+        gameStage.setTitle("Color Switch");
         gameStage.setScene(gameScene);
     }
 
@@ -183,10 +184,13 @@ public class Game{
                 }
                 
                 if(keyEvent.getCode() == KeyCode.P) {
-                    System.out.println("P key pressed");
-                    // XXX null pointer exception. ballTimeline and pauseMenuManager may not be init
-                    ballTimeline.pause();
-                    pauseMenuManager.showPauseMenu();
+                	System.out.println("P key pressed");
+                	try {
+                		ballTimeline.pause();
+                		pauseMenuManager.showPauseMenu();
+                	} catch(NullPointerException e) {
+                		System.err.println("NullPointerException - Game.java : createKeyListener()");
+                    }
                 }
             }
         });
@@ -220,7 +224,7 @@ public class Game{
     		gameStage.show();
     		ballTimeline.play();
     	} catch(NullPointerException e) {
-    		System.out.println("Game.java: startGame()");
+    		System.err.println("Game.java: startGame()");
     	}
     }
 
@@ -352,7 +356,6 @@ public class Game{
     		if(collisionDetected) {
     			System.out.println("change color");
     			this.ball.changeColor();
-    			// XXX uncomment this for removing element
     			c.removeFromPane(gamePane);
     			iter.remove();
 				
