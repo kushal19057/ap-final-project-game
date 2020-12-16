@@ -1,6 +1,8 @@
 package application;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 
@@ -53,7 +57,7 @@ public class MainMenu extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            mainMenuStage = primaryStage;    
+            mainMenuStage = primaryStage;
             initMainMenu();
             gameManager = new Game();
             primaryStage.show();
@@ -138,28 +142,27 @@ public class MainMenu extends Application {
     	helpButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent actionEvent) {
-    			VBox layout = new VBox(20);
+    			Stage helpStage = new Stage();
+    			VBox helpPane = new VBox();
+    			Scene helpScene = new Scene(helpPane, Constants.MENU_WIDTH, Constants.MENU_HEIGHT * 1.25);
+    			helpStage.initModality(Modality.APPLICATION_MODAL);
+    			helpStage.setTitle("Know More");
+    			helpStage.initStyle(StageStyle.UTILITY);
+    			helpStage.setScene(helpScene);
     			try {
-    				Image backgroundImage = new Image("resources/deep_blue.png");
-    				BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
-    				layout.setBackground(new Background(background));
-    			} catch(Exception e) {
-    				System.err.println("Exception - MainMenu.java : createHelpButton()");
+    				FileInputStream input = new FileInputStream("./src/resources/help.png");
+    				Image image = new Image(input);
+    				ImageView imageView = new ImageView(image);
+    				imageView.setFitHeight(helpScene.getHeight());
+    				imageView.setFitWidth(Constants.MENU_WIDTH);
+    				//imageView.setPreserveRatio(true);
+    				helpPane.getChildren().add(imageView);
+    			} catch(IOException e) {
+    				System.err.println("IOException - MainMenu.java : createHelpButton()");
+    			} finally {
+    				helpStage.show();
     			}
-    			layout.setPadding(new Insets(50,50,50,50));
-    			ColorSwitchButton button = new ColorSwitchButton("Back to main menu");
-    			Text text = new Text("HOW TO PLAY ?\n-> Use the \"SPACE_BAR\" to jump the ball\n"
-    					+ "-> Use the key \"P\" to pause the game\n"
-    					+ "-> Load a previously saved game using \"Load Game\" option\n"
-    					+ "-> Enjoy!");
-    			text.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-    			text.setFill(Color.AZURE);
-    			text.setWrappingWidth((Constants.MENU_WIDTH * 5)/6);
-    			button.setOnAction(e-> {
-    				mainMenuScene.setRoot(mainMenuPane);
-    			});
-    			layout.getChildren().addAll(text, button);
-    			mainMenuScene.setRoot(layout);
+    			
     		}
     	});
     }

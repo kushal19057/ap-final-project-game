@@ -36,6 +36,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class Game{
@@ -80,6 +81,7 @@ public class Game{
         gamePane = new AnchorPane();
         gameScene = new Scene(gamePane, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         gameStage = new Stage();
+        gameStage.initModality(Modality.APPLICATION_MODAL);
         gameStage.setTitle("Color Switch");
         gameStage.setScene(gameScene);
     }

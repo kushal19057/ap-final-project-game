@@ -12,6 +12,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -96,7 +97,7 @@ public class PauseMenu {
 	
 	private void initPauseMenuStage() {
     	pauseMenuPane = new AnchorPane();
-    	pauseMenuScene = new Scene(pauseMenuPane, Constants.MENU_WIDTH/2, Constants.MENU_HEIGHT/2);
+    	pauseMenuScene = new Scene(pauseMenuPane, Constants.MENU_HEIGHT/2, Constants.MENU_HEIGHT/2);
     	pauseMenuStage = new Stage();
     	pauseMenuStage.setTitle("Pause Menu");
     	pauseMenuStage.setScene(pauseMenuScene);
@@ -105,15 +106,15 @@ public class PauseMenu {
     }
 	
 	private void addPauseMenuButton(ColorSwitchButton button) {
-        button.setLayoutX(30);
-        button.setLayoutY(40 +  pauseMenuButtons.size() * 70);
+        button.setLayoutX(75);
+        button.setLayoutY(60 +  pauseMenuButtons.size() * 70);
         pauseMenuButtons.add(button);
         pauseMenuPane.getChildren().add(button);
     }
 	
     private void createBackground() {
         Image backgroundImage = new Image("resources/deep_blue.png");
-        BackgroundImage background = new BackgroundImage(backgroundImage, BackgroundRepeat.REPEAT, BackgroundRepeat.REPEAT, BackgroundPosition.DEFAULT, null);
+        BackgroundImage background = new BackgroundImage(backgroundImage, null, null, null,new BackgroundSize(100,100,true,true,false,true));
         pauseMenuPane.setBackground(new Background(background));
     }
 
