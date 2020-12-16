@@ -8,7 +8,12 @@ Created by:
 This game is made for our AP major project.
 It is clone of the famous Color Switch game.
 A working demo of the game can be seen here (YOUTUBE DEMO LINK).
-The game is made using Java and JavaFX
+The game is made using Java and JavaFX.
+The objective of the game is to collect
+as many stars as possible by manoeuvring the obstacles. If you hit any obstacle, you can continue
+with your earned stars or the game ends and you have to start from the beginning. This is a high
+score game. We have developed only the endless (infinity) game mode of the classic
+gameplay.
 
 ## Features
 - 4 Obstacles

@@ -80,6 +80,7 @@ public class Game{
         gamePane = new AnchorPane();
         gameScene = new Scene(gamePane, Constants.GAME_WIDTH, Constants.GAME_HEIGHT);
         gameStage = new Stage();
+        gameStage.setTitle("Color Switch");
         gameStage.setScene(gameScene);
     }
 

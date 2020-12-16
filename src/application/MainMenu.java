@@ -27,6 +27,9 @@ import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -135,7 +138,21 @@ public class MainMenu extends Application {
     	helpButton.setOnAction(new EventHandler<ActionEvent>() {
     		@Override
     		public void handle(ActionEvent actionEvent) {
-    			System.out.println("Help menu");
+    			VBox layout = new VBox(10);
+    			layout.setStyle("-fx-background-color: #000000;");
+    			layout.setPadding(new Insets(20,20,20,20));
+    			Button button = new Button("Back to main menu");
+    			Text text = new Text("The objective of the game is to collect as many stars as possible by manoeuvring the obstacles.\r\n"
+    					+ "If you hit any obstacle, you can continue with your earned stars or the game ends and you have to start from the beginning.\r\n"
+    					+ "This is a high score game.\r\n");
+    			text.setFont(Font.font("Arial", FontWeight.BOLD, 24));
+    			text.setFill(Color.HOTPINK);
+    			text.setWrappingWidth((Constants.MENU_WIDTH * 5)/6);
+    			button.setOnAction(e-> {
+    				mainMenuScene.setRoot(mainMenuPane);
+    			});
+    			layout.getChildren().addAll(text, button);
+    			mainMenuScene.setRoot(layout);
     		}
     	});
     }
