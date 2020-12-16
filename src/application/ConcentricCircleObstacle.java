@@ -66,7 +66,7 @@ public class ConcentricCircleObstacle extends Obstacle implements Serializable {
             listOfInnerRotate.add(rotate);
             rotate.setPivotX(currentPositionX);
             rotate.setPivotY(currentPositionY);
-            rotate.setAngle(2*angle);
+            rotate.setAngle(1.5*angle);
         }
         for(int i=0;i<4;i++) {
             Rotate rotate = new Rotate();

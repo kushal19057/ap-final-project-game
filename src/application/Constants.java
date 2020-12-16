@@ -41,5 +41,10 @@ public final class Constants {
     public static final String FILE_START_STRING = "ColorSwitchSavedGame_";
     
     public static final int NUMBER_OF_OBSTACLES = 4;
+    
+    public static final int CODE_CIRCLE_OBSTACLE = 0;
+    public static final int CODE_CONCENTRIC_CIRCLE_OBSTACLE = 1;
+    public static final int CODE_TRIPLE_CONCENTRIC_OBSTACLE = 2;
+    public static final int CODE_SQUARE_OBSTACLE = 3;
 
 }

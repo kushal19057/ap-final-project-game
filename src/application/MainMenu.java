@@ -60,29 +60,9 @@ public class MainMenu extends Application {
 
     private List<ColorSwitchButton> menuButtons;
     
-    private List<Arc> listOfOuterArcs = new ArrayList<>();
-    private List<Rotate> listOfOuterRotate = new ArrayList<>();
-    private List<Arc> listOfMiddleArcs = new ArrayList<>();
-    private List<Rotate> listOfMiddleRotate = new ArrayList<>();
-    private List<Arc> listOfInnerArcs = new ArrayList<>();
-    private List<Rotate> listOfInnerRotate = new ArrayList<>();
-    
-    private Circle circleParallelDown = new Circle(300, 350, 50);
-    private Circle circleParallelUp = new Circle(300, 350, 50);
-    
-    private FadeTransition fadeTransitionDown = new FadeTransition(Duration.millis(2000), circleParallelDown);
-    private FadeTransition fadeTransitionUp = new FadeTransition(Duration.millis(2000), circleParallelUp);
-    
-    private TranslateTransition translateTransitionDown = new TranslateTransition(Duration.millis(2000), circleParallelDown);
-    private TranslateTransition translateTransitionUp = new TranslateTransition(Duration.millis(2000), circleParallelUp);
-    
-    private ScaleTransition scaleTransitionDown = new ScaleTransition(Duration.millis(2000), circleParallelDown);
-    private ScaleTransition scaleTransitionUp = new ScaleTransition(Duration.millis(2000), circleParallelUp);
-    
-    private ParallelTransition parallelTransitionDown = new ParallelTransition();
-    private ParallelTransition parallelTransitionUp = new ParallelTransition();
-    
+    private MainMenuAnimation animation;
     private static MediaPlayer mediaPlayer;
+    
     public static void main(String[] args) {
         launch(args);
     }
@@ -130,107 +110,9 @@ public class MainMenu extends Application {
         Constants.map.put(2,Color.YELLOW);
         Constants.map.put(3,Color.INDIGO);
         
-        mainMenuPane.getChildren().add(circleParallelDown);
-        mainMenuPane.getChildren().add(circleParallelUp);
-        circleParallelDown.setFill(Color.AZURE);
-        circleParallelUp.setFill(Color.BEIGE);
+        animation = new MainMenuAnimation(mainMenuPane);
+        animation.addElementsToGamePane(mainMenuPane);
 
-        fadeTransitionDown.setFromValue(1.0f);
-        fadeTransitionDown.setToValue(0.3f);
-        fadeTransitionDown.setCycleCount(2);
-        fadeTransitionDown.setAutoReverse(true);
-        
-        fadeTransitionUp.setFromValue(1.0f);
-        fadeTransitionUp.setToValue(0.3f);
-        fadeTransitionUp.setCycleCount(2);
-        fadeTransitionUp.setAutoReverse(true);
-
-        translateTransitionDown.setFromY(0);
-        translateTransitionDown.setToY(200);
-        translateTransitionDown.setCycleCount(2);
-        translateTransitionDown.setAutoReverse(true);
-        
-        translateTransitionUp.setFromY(0);
-        translateTransitionUp.setToY(-200);
-        translateTransitionUp.setCycleCount(2);
-        translateTransitionUp.setAutoReverse(true);
-
-        scaleTransitionDown.setToX(2f);
-        scaleTransitionDown.setToY(2f);
-        scaleTransitionDown.setCycleCount(2);
-        scaleTransitionDown.setAutoReverse(true);
-        
-        scaleTransitionUp.setToX(2f);
-        scaleTransitionUp.setToY(2f);
-        scaleTransitionUp.setCycleCount(2);
-        scaleTransitionUp.setAutoReverse(true);
-    
-        parallelTransitionDown.getChildren().addAll(
-            fadeTransitionDown,
-            translateTransitionDown,
-            scaleTransitionDown
-         );
-        
-        parallelTransitionUp.getChildren().addAll(
-                fadeTransitionUp,
-                translateTransitionUp,
-                scaleTransitionUp
-             );
-        parallelTransitionDown.setCycleCount(Timeline.INDEFINITE);
-        parallelTransitionUp.setCycleCount(Timeline.INDEFINITE);
-        
-        parallelTransitionDown.play();
-        parallelTransitionUp.play();
-        
-        for(int i=0;i<4;i++) {
-            Arc arc = new Arc(300, 350, 150, 150, i * 90, 60);
-            listOfOuterArcs.add(arc);
-            arc.setFill(Color.TRANSPARENT);
-            arc.setStroke(Constants.map.get(i));
-            arc.setStrokeWidth(20);
-            arc.setType(ArcType.OPEN);
-            mainMenuPane.getChildren().add(arc);
-        }
-        for(int i=0;i<4;i++) {
-            Arc arc = new Arc(300, 350, 120, 120, i * 90, 60);
-            listOfMiddleArcs.add(arc);
-            arc.setFill(Color.TRANSPARENT);
-            arc.setStroke(Constants.map.get(i));
-            arc.setStrokeWidth(20);
-            arc.setType(ArcType.OPEN);
-            mainMenuPane.getChildren().add(arc);
-        }
-        for(int i=0;i<4;i++) {
-            Arc arc = new Arc(300, 350, 90, 90, i * 90, 60);
-            listOfInnerArcs.add(arc);
-            arc.setFill(Color.TRANSPARENT);
-            arc.setStroke(Constants.map.get(i));
-            arc.setStrokeWidth(20);
-            arc.setType(ArcType.OPEN);
-            mainMenuPane.getChildren().add(arc);
-        }
-        
-        for(int i=0;i<4;i++) {
-            Rotate rotate = new Rotate();
-            listOfOuterRotate.add(rotate);
-            rotate.setPivotX(300);
-            rotate.setPivotY(350);
-            rotate.setAngle(3.5);
-        }
-        for(int i=0;i<4;i++) {
-            Rotate rotate = new Rotate();
-            listOfMiddleRotate.add(rotate);
-            rotate.setPivotX(300);
-            rotate.setPivotY(350);
-            rotate.setAngle(3);
-        }
-        for(int i=0;i<4;i++) {
-            Rotate rotate = new Rotate();
-            listOfInnerRotate.add(rotate);
-            rotate.setPivotX(300);
-            rotate.setPivotY(350);
-            rotate.setAngle(2.5);
-        }
         KeyFrame kf = new KeyFrame(Duration.millis(Constants.UPDATE_PERIOD), new TimeHandler());
         Timeline timeline = new Timeline(kf);
         timeline.setCycleCount(Animation.INDEFINITE);
@@ -241,11 +123,7 @@ public class MainMenu extends Application {
     private class TimeHandler implements EventHandler<ActionEvent> {
         @Override
         public void handle(ActionEvent event) {
-            for(int i=0;i<4;i++) {
-                listOfInnerArcs.get(i).getTransforms().add(listOfInnerRotate.get(i));
-                listOfMiddleArcs.get(i).getTransforms().add(listOfMiddleRotate.get(i));
-                listOfOuterArcs.get(i).getTransforms().add(listOfOuterRotate.get(i));
-            }
+            animation.transformElements();
         }
     }
 

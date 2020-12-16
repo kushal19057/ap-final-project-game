@@ -210,32 +210,22 @@ public class Game implements Serializable {
     }
 
     // --- 
-
     
+    /*
+     * generate an obstacle on the basis of currentScore
+     * If currentScore < 2 * number_of_obstacles, generate sequentially
+     * Else generate randomly
+     * 
+     * @param	y	y position where obstacle should be generated
+     * @return 		instance of Obstacle, never null
+     */
     private Obstacle generateObstacleRandomly(double y) {
-    	if(currentScore < 2) {
-    	    return new CircleObstacle(y);
-    	} else if(currentScore < 4) {
-    	    return new SquareObstacle(y);
-    	} else if(currentScore < 6) {
-    	    return new TripleConcentricCircleObstacle(y);
-    	} else if(currentScore < 8) {
-    	    return new ConcentricCircleObstacle(y);
+    	if(currentScore < 2 * Constants.NUMBER_OF_OBSTACLES) {
+    		int n = currentScore / 4;
+    	    return ObstacleFactory.createObstacle(n, y);
     	} else {
     	    int n = random.nextInt(Constants.NUMBER_OF_OBSTACLES);
-    	    if(n == 0) {
-    	        return new CircleObstacle(y);
-    	    } else if (n == 1) {
-    	        return new SquareObstacle(y);
-    	    } else if (n == 2) {
-    	        return new TripleConcentricCircleObstacle(y);
-    	    } else if (n == 3) {
-    	        return new ConcentricCircleObstacle(y);
-    	    } else {
-    	        // should never reach this state
-    	        System.out.println("logical error.");
-    	        return new CircleObstacle(y);
-    	    }
+    	    return ObstacleFactory.createObstacle(n, y);
     	}
     }
 
