@@ -1,7 +1,32 @@
-# README
-## AP final project - Color Switch Game
+# Color Switch 
+## Details
 
-A JavaFX application
+Created by:
+- Kushal Juneja
+- Rohan Hiranandani
 
-- how to add music using javafx -   https://www.javatpoint.com/javafx-playing-audio
-- Start tmrw, start today, start yesterday. you got this!
+This game is made for our AP major project.
+It is clone of the famous Color Switch game.
+A working demo of the game can be seen here (YOUTUBE DEMO LINK).
+The game is made using Java and JavaFX
+
+## Features
+- 4 Obstacles
+- A jumping Ball
+- Score
+- Revive
+- Save Game
+- Restart Game
+- Load Game
+- Sound Effects
+
+## Design Patters
+- Iterator
+- Factory
+- Chain of responsibility
+- Facade
+
+## Screenshots from the game
+![Main Menu](screenshots/home_page.png)
+
+## License
