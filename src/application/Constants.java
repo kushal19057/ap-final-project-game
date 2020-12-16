@@ -15,7 +15,7 @@ public final class Constants {
     public static final double GAME_HEIGHT = 1024;
 
     public static final double UPDATE_PERIOD = 30;
-    public static final double GRAVITY = 3; 
+    public static final double GRAVITY = 2.5; 
     public static final double VELOCITY_JUMP = -8; 
 
     public static final String STAR_PATH = "file:./src/resources/star_silver.png";
@@ -28,7 +28,7 @@ public final class Constants {
     public static final double BALL_RADIUS = 20;
     public static final double STAR_RADIUS = 30;
     
-    public static final double DISTANCE_BETWEEN_OBSTACLES = 600;
+    public static final double DISTANCE_BETWEEN_OBSTACLES = 700;
     
     public static final double START_DELTA_BALL = 100;
     

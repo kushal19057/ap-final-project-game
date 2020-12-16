@@ -1,4 +1,5 @@
 package application;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -25,6 +26,8 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Arc;
 import javafx.scene.shape.Rectangle;
@@ -176,6 +179,7 @@ public class Game{
                         gravity = Constants.GRAVITY;
                     }
                     currentVelocityY = -20;
+					
                 }
                 
                 if(keyEvent.getCode() == KeyCode.P) {
@@ -274,6 +278,15 @@ public class Game{
     }
     
     private void gameOver() {
+    	// play music
+    	try {
+    		String file = "src/resources/collision.wav";
+    		Media sound = new Media(new File(file).toURI().toString());
+    		MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    		mediaPlayer.play();
+    	} catch(Exception e) {
+    		e.printStackTrace();
+    	}
         currentPositionY -= 75;
         currentPositionY -= 80;
         currentVelocityY = 0;
@@ -342,6 +355,17 @@ public class Game{
     			// XXX uncomment this for removing element
     			c.removeFromPane(gamePane);
     			iter.remove();
+				
+				 //play music 
+    			try { 
+    				String file = "src/resources/jump.wav"; 
+    				Media sound = new Media(new File(file).toURI().toString()); 
+    				MediaPlayer mediaPlayer = new MediaPlayer(sound); 
+    				mediaPlayer.play(); 
+    			} catch(Exception e) {
+    				e.printStackTrace(); 
+    			}
+
     			break;
     		}
     	}
@@ -354,7 +378,16 @@ public class Game{
     			updateScoreLabel();
     			// remove this star graphically and logically
     			iterstar.remove();
-    			s.removeFromPane(gamePane); 
+    			s.removeFromPane(gamePane);
+    			// play music
+    			try {
+    	        	String musicFile = "src/resources/collected.wav";
+    	        	Media sound = new Media(new File(musicFile).toURI().toString());
+    	            MediaPlayer mediaPlayer = new MediaPlayer(sound);
+    	            mediaPlayer.play();
+    	        } catch(Exception e) {
+    	        	e.printStackTrace();
+    	        }
     		}
     	}
     }
