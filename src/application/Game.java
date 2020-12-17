@@ -254,8 +254,12 @@ public class Game{
     
     private class BallTimeHandler implements EventHandler<ActionEvent> {
     	public void handle(ActionEvent event) {
+    		try {
     		for(Obstacle obstacle : listOfObstacles) {
     			obstacle.rotate();
+    		}
+    		} catch(NullPointerException e) {
+    			System.err.println("NPE - Game.java : BallTimeHandler");
     		}
     		// update position of ball
     		double updatedVelocityY = currentVelocityY + gravity;

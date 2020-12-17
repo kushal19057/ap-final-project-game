@@ -40,7 +40,7 @@ public class PauseMenu {
 		pauseMenuStage.setOnCloseRequest((event) -> {
 		    System.out.println("Closing Stage");
 		    pauseMenuStage.close();
-		    gameManager.resumeGame();
+		    //gameManager.resumeGame();
 		});
 	}
 	
@@ -52,7 +52,7 @@ public class PauseMenu {
 			@Override
 			public void handle(ActionEvent actionEvent) {
 				pauseMenuStage.close();
-				//gameManager.resumeGame();
+				gameManager.resumeGame();
 			}
 		});
 		
