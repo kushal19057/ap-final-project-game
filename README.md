@@ -7,7 +7,6 @@ Created by:
 
 This game is made for our AP major project.
 It is clone of the famous Color Switch game.
-A working demo of the game can be seen [here](https://youtu.be/AvQjJcQ5CgQ) .
 The game is made using Java and JavaFX.
 The objective of the game is to collect
 as many stars as possible by manoeuvring the obstacles. If you hit any obstacle, you can continue
