@@ -36,7 +36,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
 public class Game{
@@ -196,6 +195,10 @@ public class Game{
                 }
             }
         });
+        gameStage.setOnCloseRequest((event) -> {
+		    System.out.println("Closing Stage");
+		    gameStage.close();
+		});
     }
 
     /*
@@ -550,7 +553,6 @@ public class Game{
             gameStage.show();
             setupBallTimeline(); 
             resumeGame();
-            ballTimeline.play();
             is.close();
         } catch(Exception e) {
             System.out.println("Game.java : deserialise()");

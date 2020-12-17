@@ -10,8 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,6 +37,11 @@ public class PauseMenu {
 		createRestartButton();
 		createSaveAndBackToMainMenuButton();
 		createExitWithoutSavingButton();
+		pauseMenuStage.setOnCloseRequest((event) -> {
+		    System.out.println("Closing Stage");
+		    pauseMenuStage.close();
+		    gameManager.resumeGame();
+		});
 	}
 	
 	private void createResumeButton() {
@@ -49,7 +52,7 @@ public class PauseMenu {
 			@Override
 			public void handle(ActionEvent actionEvent) {
 				pauseMenuStage.close();
-				gameManager.resumeGame();
+				//gameManager.resumeGame();
 			}
 		});
 		
