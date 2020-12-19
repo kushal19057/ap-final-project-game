@@ -37,3 +37,9 @@ gameplay.
 ![gameplay](/screenshots/gameplay2.png)
 ![load game](/screenshots/load.png)
 ![pause menu](/screenshots/pause.png)
+
+## Configure eclipse IDE to run by adding the following VM arguments
+```
+--module-path "PATH_TO_FX" --add-modules javafx.fxml,javafx.controls,javafx.media
+```
+- Also ensure that the project recognises JavaFX jars as external user libraries
